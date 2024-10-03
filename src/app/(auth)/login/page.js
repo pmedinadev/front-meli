@@ -1,123 +1,127 @@
 'use client'
 
 import Button from '@/components/Button'
-import Input from '@/components/Input'
-import InputError from '@/components/InputError'
-import Label from '@/components/Label'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
+import {
+  FormCheck,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Spinner,
+} from 'react-bootstrap'
 
 const Login = () => {
-    const router = useRouter()
+  const router = useRouter()
 
-    const { login } = useAuth({
-        middleware: 'guest',
-        redirectIfAuthenticated: '/',
-    })
+  const { login } = useAuth({
+    middleware: 'guest',
+    redirectIfAuthenticated: '/',
+  })
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [shouldRemember, setShouldRemember] = useState(false)
-    const [errors, setErrors] = useState([])
-    const [status, setStatus] = useState(null)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [shouldRemember, setShouldRemember] = useState(false)
+  const [errors, setErrors] = useState([])
+  const [status, setStatus] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        if (router.reset?.length > 0 && errors.length === 0) {
-            setStatus(atob(router.reset))
-        } else {
-            setStatus(null)
-        }
-    })
-
-    const submitForm = async event => {
-        event.preventDefault()
-
-        login({
-            email,
-            password,
-            remember: shouldRemember,
-            setErrors,
-            setStatus,
-        })
+  useEffect(() => {
+    if (router.reset?.length > 0 && errors.length === 0) {
+      setStatus(atob(router.reset))
+    } else {
+      setStatus(null)
     }
+  })
 
-    return (
-        <>
-            <AuthSessionStatus className="mb-4" status={status} />
-            <form onSubmit={submitForm}>
-                {/* Email Address */}
-                <div>
-                    <Label htmlFor="email">Email</Label>
+  const submitForm = async event => {
+    event.preventDefault()
 
-                    <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        className="block mt-1 w-full"
-                        onChange={event => setEmail(event.target.value)}
-                        required
-                        autoFocus
-                    />
+    login({
+      email,
+      password,
+      remember: shouldRemember,
+      setErrors,
+      setStatus,
+      setLoading
+    })
+  }
 
-                    <InputError messages={errors.email} className="mt-2" />
-                </div>
+  return (
+    <>
+      {/* <AuthSessionStatus className="mb-4" status={status} /> */}
+      <form onSubmit={submitForm}>
+        {/* Email Address */}
+        <div>
+          <FormGroup>
+            <FormLabel>E-mail</FormLabel>
+            <FormControl
+              id="email"
+              type="email"
+              value={email}
+              onChange={event => setEmail(event.target.value)}
+              required
+              autoFocus
+              isInvalid={!!errors.email}
+            />
+            <FormControl.Feedback type="invalid">
+              {errors.email}
+            </FormControl.Feedback>
+          </FormGroup>
+        </div>
 
-                {/* Password */}
-                <div className="mt-4">
-                    <Label htmlFor="password">Password</Label>
+        {/* Password */}
+        <div className="mt-4">
+          <FormGroup>
+            <FormLabel>Password</FormLabel>
+            <FormControl
+              id="password"
+              type="password"
+              value={password}
+              onChange={event => setPassword(event.target.value)}
+              required
+              autoComplete="current-password"
+              isInvalid={!!errors.password}
+            />
+            <FormControl.Feedback type="invalid">
+              {errors.password}
+            </FormControl.Feedback>
+          </FormGroup>
+        </div>
 
-                    <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        className="block mt-1 w-full"
-                        onChange={event => setPassword(event.target.value)}
-                        required
-                        autoComplete="current-password"
-                    />
+        {/* Remember Me */}
+        <div className="mt-4">
+          <FormCheck
+            type="checkbox"
+            label="Remember me"
+            id="remember_me"
+            name="remember"
+            onChange={event => setShouldRemember(event.target.checked)}
+          />
+        </div>
 
-                    <InputError
-                        messages={errors.password}
-                        className="mt-2"
-                    />
-                </div>
-
-                {/* Remember Me */}
-                <div className="block mt-4">
-                    <label
-                        htmlFor="remember_me"
-                        className="inline-flex items-center">
-                        <input
-                            id="remember_me"
-                            type="checkbox"
-                            name="remember"
-                            className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            onChange={event =>
-                                setShouldRemember(event.target.checked)
-                            }
-                        />
-
-                        <span className="ml-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    <Link
-                        href="/forgot-password"
-                        className="underline text-sm text-gray-600 hover:text-gray-900">
-                        Forgot your password?
-                    </Link>
-
-                    <Button className="ml-3">Login</Button>
-                </div>
-            </form>
-        </>
-    )
+        <div className="flex items-center justify-end mt-4">
+          <Button disabled={loading} className="btn btn-primary">
+            {loading ? (
+              <>
+                <Spinner animation="border" size="sm" /> Loading...
+              </>
+            ) : (
+              'Log in'
+            )}
+          </Button>
+          <Link
+            href="/forgot-password"
+            className="link-primary link-underline link-underline-opacity-0 link-underline-opacity-100-hover ms-3">
+            Forgot your password?
+          </Link>
+        </div>
+      </form>
+    </>
+  )
 }
 
 export default Login
