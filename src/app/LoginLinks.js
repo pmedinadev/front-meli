@@ -37,7 +37,7 @@ const LoginLinks = () => {
             </DropdownToggle>
             <DropdownMenu as="ul" className="border-0 shadow-sm">
               <li>
-                <DropdownItem as={Link} href="#">
+                <DropdownItem as={Link} href="/profile">
                   My profile
                 </DropdownItem>
               </li>
