@@ -9,7 +9,7 @@ import { FormControl, FormGroup, FormLabel, Spinner } from 'react-bootstrap'
 const Page = () => {
   const { register } = useAuth({
     middleware: 'guest',
-    redirectIfAuthenticated: '/verify-email',
+    redirectIfAuthenticated: '/',
   })
 
   const [name, setName] = useState('')

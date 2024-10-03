@@ -11,6 +11,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     data: user,
     error,
     mutate,
+    isValidating,
   } = useSWR('/api/user', () =>
     axios
       .get('/api/user')
@@ -105,19 +106,29 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       await axios.post('/logout').then(() => mutate())
     }
 
-    window.location.pathname = '/'
+    window.location.pathname = '/login'
   }
 
   useEffect(() => {
+    //
     if (middleware === 'guest' && redirectIfAuthenticated && user)
       router.push(redirectIfAuthenticated)
+
+    // Redirigir si el usuario está en la página de verificación pero ya ha verificado su correo
     if (window.location.pathname === '/verify-email' && user?.email_verified_at)
       router.push(redirectIfAuthenticated)
+
+    // Middleware de autenticación: Redirigir si no está autenticado
     if (middleware === 'auth' && error) logout()
+
+    // Middleware de verificación: Redirigir si el usuario no ha verificado su email
+    if (middleware === 'verified' && user && !user?.email_verified_at)
+      router.push('/verify-email')
   }, [user, error])
 
   return {
     user,
+    isValidating,
     register,
     login,
     forgotPassword,
