@@ -1,9 +1,13 @@
+'use client'
+
 import LoginLinks from '@/app/LoginLinks'
+import { useCategories } from '@/hooks/useCategories'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
   Button,
   Container,
+  DropdownDivider,
   DropdownItem,
   Nav,
   Navbar,
@@ -15,6 +19,8 @@ import {
 } from 'react-bootstrap'
 
 export default function Navigation() {
+  const { categories, isLoading, isError } = useCategories()
+
   return (
     <Navbar expand="lg" className="bg-primary-meli">
       <Container>
@@ -39,8 +45,16 @@ export default function Navigation() {
             <NavDropdown
               title="Categories"
               className="link-body-emphasis border-0">
-              <DropdownItem as={Link} href="/">
-                Example 1
+              {isLoading && <DropdownItem>Loading...</DropdownItem>}
+              {isError && <DropdownItem>Error loading categories</DropdownItem>}
+              {categories && categories.slice(0, 10).map(category => (
+                <DropdownItem key={category.id} as={Link} href={`/category/${category.id}`}>
+                  {category.name}
+                </DropdownItem>
+              ))}
+              <DropdownDivider />
+              <DropdownItem as={Link} href="/categories">
+                View all categories
               </DropdownItem>
             </NavDropdown>
             <NavLink as={Link} href="/">
