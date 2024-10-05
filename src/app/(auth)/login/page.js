@@ -12,6 +12,7 @@ import {
   FormGroup,
   FormLabel,
   Spinner,
+  Stack,
 } from 'react-bootstrap'
 
 const Login = () => {
@@ -46,13 +47,13 @@ const Login = () => {
       remember: shouldRemember,
       setErrors,
       setStatus,
-      setLoading
+      setLoading,
     })
   }
 
   return (
     <>
-      {/* <AuthSessionStatus className="mb-4" status={status} /> */}
+      <AuthSessionStatus className="mb-4" status={status} />
       <form onSubmit={submitForm}>
         {/* Email Address */}
         <div>
@@ -103,7 +104,7 @@ const Login = () => {
           />
         </div>
 
-        <div className="flex items-center justify-end mt-4">
+        <div className="d-grid mt-4">
           <Button disabled={loading} className="btn btn-primary">
             {loading ? (
               <>
@@ -113,11 +114,22 @@ const Login = () => {
               'Log in'
             )}
           </Button>
-          <Link
-            href="/forgot-password"
-            className="link-primary link-underline link-underline-opacity-0 link-underline-opacity-100-hover ms-3">
-            Forgot your password?
-          </Link>
+          <Stack
+            direction="horizontal"
+            gap={2}
+            className="justify-content-center mt-4">
+            <Link
+              href="/forgot-password"
+              className="link-primary link-underline link-underline-opacity-0 link-underline-opacity-100-hover">
+              Forgot your password?
+            </Link>
+            <span className="text-primary">·</span>
+            <Link
+              href="/register"
+              className="link-primary link-underline link-underline-opacity-0 link-underline-opacity-100-hover">
+              Create a new account
+            </Link>
+          </Stack>
         </div>
       </form>
     </>
