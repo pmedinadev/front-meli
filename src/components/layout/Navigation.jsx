@@ -47,11 +47,11 @@ export default function Navigation() {
               className="link-body-emphasis border-0">
               {isLoading && <DropdownItem>Loading...</DropdownItem>}
               {isError && <DropdownItem>Error loading categories</DropdownItem>}
-              {categories && categories.slice(0, 10).map(category => (
+              {/* {categories && categories.slice(0, 10).map(category => (
                 <DropdownItem key={category.id} as={Link} href={`/category/${category.id}`}>
                   {category.name}
                 </DropdownItem>
-              ))}
+              ))} */}
               <DropdownDivider />
               <DropdownItem as={Link} href="/categories">
                 View all categories
