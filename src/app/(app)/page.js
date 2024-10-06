@@ -1,5 +1,12 @@
-import Image from "next/image"
-import { Carousel, CarouselItem } from "react-bootstrap"
+import Image from 'next/image'
+import {
+  Card,
+  CardBody,
+  CardImg,
+  Carousel,
+  CarouselItem,
+  Container,
+} from 'react-bootstrap'
 
 export const metadata = {
   title: 'Mercado Libre',
@@ -37,6 +44,106 @@ const Home = () => {
           </CarouselItem>
         ))}
       </Carousel>
+
+      {/* Productos */}
+      <Container>
+        <div className="bg-body rounded shadow-sm p-4 mt-4">
+          <h4>Productos</h4>
+
+          <div className="d-flex mt-3">
+            <Card border="0" style={{ width: '12rem' }}>
+              <CardImg
+                src="/images/products/ejemplo.webp"
+                as={Image}
+                width={100}
+                height={180}
+              />
+              <CardBody>
+                <p>Teléfono Celular Samsung</p>
+                <h3 className='mb-0'>$2,000</h3>
+              </CardBody>
+            </Card>
+
+            <Card border="0" style={{ width: '12rem' }}>
+              <CardImg
+                src="/images/products/ejemplo.webp"
+                as={Image}
+                width={100}
+                height={180}
+              />
+              <CardBody>
+                <p>Teléfono Celular Samsung</p>
+                <h3 className='mb-0'>$2,000</h3>
+              </CardBody>
+            </Card>
+
+            <Card border="0" style={{ width: '12rem' }}>
+              <CardImg
+                src="/images/products/ejemplo.webp"
+                as={Image}
+                width={100}
+                height={180}
+              />
+              <CardBody>
+                <p>Teléfono Celular Samsung</p>
+                <h3 className='mb-0'>$2,000</h3>
+              </CardBody>
+            </Card>
+
+            <Card border="0" style={{ width: '12rem' }}>
+              <CardImg
+                src="/images/products/ejemplo.webp"
+                as={Image}
+                width={100}
+                height={180}
+              />
+              <CardBody>
+                <p>Teléfono Celular Samsung</p>
+                <h3 className='mb-0'>$2,000</h3>
+              </CardBody>
+            </Card>
+
+            <Card border="0" style={{ width: '12rem' }}>
+              <CardImg
+                src="/images/products/ejemplo.webp"
+                as={Image}
+                width={100}
+                height={180}
+              />
+              <CardBody>
+                <p>Teléfono Celular Samsung</p>
+                <h3 className='mb-0'>$2,000</h3>
+              </CardBody>
+            </Card>
+
+            <Card border="0" style={{ width: '12rem' }}>
+              <CardImg
+                src="/images/products/ejemplo.webp"
+                as={Image}
+                width={100}
+                height={180}
+              />
+              <CardBody>
+                <p>Teléfono Celular Samsung</p>
+                <h3 className='mb-0'>$2,000</h3>
+              </CardBody>
+            </Card>
+
+            <Card border="0" style={{ width: '12rem' }}>
+              <CardImg
+                src="/images/products/ejemplo.webp"
+                as={Image}
+                width={100}
+                height={180}
+              />
+              <CardBody>
+                <p>Teléfono Celular Samsung</p>
+                <h3 className='mb-0'>$2,000</h3>
+              </CardBody>
+            </Card>
+          </div>
+        </div>
+      </Container>
     </>
   )
 }
