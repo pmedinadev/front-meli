@@ -11,26 +11,31 @@ const options = [
     icon: 'person-vcard',
     title: 'Personal information',
     subtitle: 'Information of your official identity and fiscal activity.',
+    href: '/profile/personal-information',
   },
   {
     icon: 'person',
     title: 'Account details',
     subtitle: 'Data that represent your Mercado Libre account.',
+    href: '/profile/account-details',
   },
   {
     icon: 'lock',
     title: 'Security',
     subtitle: 'Security settings for your account.',
+    href: '/profile/security',
   },
   {
     icon: 'credit-card',
     title: 'Cards',
     subtitle: 'Cards saved to your account.',
+    href: '/profile/cards',
   },
   {
     icon: 'geo-alt',
     title: 'Addresses',
     subtitle: 'Addresses saved to your account.',
+    href: '/profile/addresses',
   },
 ]
 
@@ -63,7 +68,7 @@ export default function MyProfile() {
         {options.map((item, index) => (
           <Row
             as={Link}
-            href="#"
+            href={item.href}
             key={index}
             className="d-flex align-items-center text-decoration-none">
             <Col className="col-auto">
