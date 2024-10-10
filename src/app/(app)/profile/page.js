@@ -16,9 +16,9 @@ const options = [
   },
   {
     icon: 'person',
-    title: 'Account details',
+    title: 'Account data',
     subtitle: 'Data that represent your Mercado Libre account.',
-    href: '/profile/account-details',
+    href: '/profile/account-data',
   },
   {
     icon: 'lock',
@@ -63,14 +63,14 @@ export default function MyProfile() {
             />
           </Col>
           <Col className="d-flex flex-column">
-            <h5 className="mb-0">{user?.name}</h5>
+            <h5 className="mb-0">{user?.display_name}</h5>
             <p className="text-muted mb-0">{user?.email}</p>
           </Col>
         </Row>
       </CardContainer>
 
       {/* Opciones */}
-      <CardContainer className="mt-3 px-5 py-4">
+      <CardContainer className="mt-3 p-4">
         <Stack gap={5}>
           {options.map((item, index) => (
             <Row

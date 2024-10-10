@@ -114,6 +114,28 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     window.location.pathname = '/login'
   }
 
+  const updateProfile = async ({ setErrors, setLoading, ...props }) => {
+    setLoading(true)
+    await csrf()
+
+    setErrors([])
+
+    return axios
+      .patch('/api/profile', props)
+      .then(() => {
+        mutate()
+        setLoading(false)
+        return true
+      })
+      .catch(error => {
+        setLoading(false)
+        if (error.response.status !== 422) throw error
+
+        setErrors(error.response.data.errors)
+        return false
+      })
+  }
+
   useEffect(() => {
     //
     if (middleware === 'guest' && redirectIfAuthenticated && user)
@@ -140,5 +162,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     resetPassword,
     resendEmailVerification,
     logout,
+    updateProfile,
   }
 }

@@ -5,5 +5,9 @@ export const metadata = {
 }
 
 export default function MyProfileLayout({ children }) {
-  return <Container className="mt-5">{children}</Container>
+  return (
+    <Container className="mt-5">
+      {children}
+    </Container>
+  )
 }
