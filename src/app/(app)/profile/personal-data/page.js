@@ -3,10 +3,21 @@
 import CardContainer from '@/components/layout/CardContainer'
 import { useAuth } from '@/hooks/auth'
 import Link from 'next/link'
-import { Button, Col, Row } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
+import { Button, Col, Row, Toast, ToastBody, ToastContainer, ToastHeader } from 'react-bootstrap'
 
 export default function PersonalInformation() {
   const { user } = useAuth({ middleware: 'auth' })
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+
+  useEffect(() => {
+    if (localStorage.getItem('displayNameUpdated') === 'true') {
+      setToastMessage('Display name updated successfully')
+      setShowToast(true)
+      localStorage.removeItem('displayNameUpdated')
+    }
+  }, [])
 
   if (user) {
     const fullName =
@@ -62,6 +73,21 @@ export default function PersonalInformation() {
             </Col>
           </Row>
         </CardContainer>
+
+        <ToastContainer position="bottom-end" className="p-4">
+          <Toast
+            onClose={() => setShowToast(false)}
+            show={showToast}
+            delay={5000}
+            autohide
+            className="p-0">
+            <ToastHeader>
+              <i className="bi bi-check-circle-fill text-success me-2" />
+              <strong className="me-auto">Success</strong>
+            </ToastHeader>
+            <ToastBody>{toastMessage}</ToastBody>
+          </Toast>
+        </ToastContainer>
       </>
     )
   }

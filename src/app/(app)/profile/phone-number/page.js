@@ -5,33 +5,26 @@ import { useAuth } from '@/hooks/auth'
 import { useProfile } from '@/hooks/useProfile'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Button,
   Form,
   FormControl,
   FormGroup,
   FormLabel,
+  FormSelect,
+  InputGroup,
   Row,
 } from 'react-bootstrap'
 
-export default function DisplayName() {
+export default function PhoneNumber() {
   const { user } = useAuth({ middleware: 'auth' })
   const { updateProfile, loading, errors } = useProfile()
   const [formData, setFormData] = useState({
-    display_name: '',
+    phone: '',
+    countryCode: '+52',
   })
-  const [originalDisplayName, setOriginalDisplayName] = useState('')
   const router = useRouter()
-
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        display_name: user.display_name,
-      })
-      setOriginalDisplayName(user.display_name)
-    }
-  }, [user])
 
   const handleChange = e => {
     setFormData({
@@ -42,10 +35,11 @@ export default function DisplayName() {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    const success = await updateProfile({ ...formData })
+    const fullPhoneNumber = `${formData.countryCode}${formData.phone}`
+    const success = await updateProfile({ phone: fullPhoneNumber })
     if (success) {
-      localStorage.setItem('displayNameUpdated', 'true')
-      router.push('/profile/personal-data')
+      localStorage.setItem('phoneUpdated', 'true')
+      router.push('/profile/account-data')
     }
   }
 
@@ -54,42 +48,45 @@ export default function DisplayName() {
       <>
         <div className="d-flex flex-column align-items-center">
           <Row className="g-0 w-50">
-            <h4 className="mb-4">What do you want us to call you?</h4>
-            <p className="text-body-tertiary">
-              Everyone who interacts with you on Mercado Libre will see the name
-              you choose.
-            </p>
-            <p className="text-body-tertiary">
-              We will only use your full name if required for legal
-              reasons.
-            </p>
-            <CardContainer className="p-4">
+            <CardContainer className="p-5">
+              <h5 className="mb-4 fw-bold">Enter your phone number</h5>
               <Form onSubmit={handleSubmit}>
                 <FormGroup className="mb-4">
-                  <FormLabel className="text-muted">Display name</FormLabel>
-                  <FormControl
-                    type="text"
-                    name="display_name"
-                    value={formData.display_name}
-                    onChange={handleChange}
-                    isInvalid={!!errors.display_name}
-                  />
+                  <FormLabel>Area code + number</FormLabel>
+                  <InputGroup>
+                    <FormSelect
+                      name='countryCode'
+                      value={formData.countryCode}
+                      onChange={handleChange}>
+                      <option value="+52">+52</option>
+                      <option value="+1">+1</option>
+                    </FormSelect>
+                    <FormControl
+                      type="text"
+                      name="phone"
+                      value={formData.phone}
+                      required
+                      onChange={handleChange}
+                      isInvalid={!!errors.phone}
+                      className="w-75"
+                    />
+                  </InputGroup>
                   <FormControl.Feedback type="invalid">
-                    {errors.display_name}
+                    {errors.phone}
                   </FormControl.Feedback>
                 </FormGroup>
                 <Button
                   size="sm"
                   type="submit"
-                  disabled={loading || formData.display_name === originalDisplayName}
+                  disabled={loading}
                   className="py-2 px-4 fw-medium">
-                  {loading ? 'Loading...' : 'Save'}
+                  {loading ? 'Loading...' : 'Continue'}
                 </Button>
                 <Button
                   variant="link"
                   size="sm"
                   as={Link}
-                  href="/profile"
+                  href="/profile/account-data"
                   className="text-decoration-none fw-medium ms-3">
                   Go back
                 </Button>

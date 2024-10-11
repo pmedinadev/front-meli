@@ -2,6 +2,7 @@
 
 import CardContainer from '@/components/layout/CardContainer'
 import { useAuth } from '@/hooks/auth'
+import { useProfile } from '@/hooks/useProfile'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -16,12 +17,11 @@ import {
 } from 'react-bootstrap'
 
 export default function ModifyUsername() {
-  const { user, updateProfile } = useAuth({ middleware: 'auth' })
+  const { user } = useAuth({ middleware: 'auth' })
+  const { updateProfile, loading, errors } = useProfile()
   const [formData, setFormData] = useState({
     username: '',
   })
-  const [errors, setErrors] = useState([])
-  const [loading, setLoading] = useState(false)
   const [originalUsername, setOriginalUsername] = useState('')
   const router = useRouter()
 
@@ -43,10 +43,7 @@ export default function ModifyUsername() {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    setLoading(true)
-    setErrors({})
-    const success = await updateProfile({ ...formData, setErrors, setLoading })
-    setLoading(false)
+    const success = await updateProfile({ ...formData })
     if (success) {
       localStorage.setItem('usernameUpdated', 'true')
       router.push('/profile/account-data')
@@ -72,7 +69,7 @@ export default function ModifyUsername() {
                     type="text"
                     name="username"
                     value={formData.username}
-                    maxlength="30"
+                    maxLength="30"
                     required
                     onChange={handleChange}
                     isInvalid={!!errors.username}

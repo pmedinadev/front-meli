@@ -1,10 +1,10 @@
 'use client'
 
-import { useAuth } from "@/hooks/auth"
+import { useAuth } from '@/hooks/auth'
 
-export default function SellPage () {
+export default function SellPage() {
   const { user } = useAuth({ middleware: 'auth' })
-  useAuth({ middleware: 'verified' })
+  useAuth({ middleware: 'verified', redirectIfAuthenticated: '/verify-email' })
 
   return (
     <>

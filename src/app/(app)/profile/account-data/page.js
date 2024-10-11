@@ -4,22 +4,36 @@ import CardContainer from '@/components/layout/CardContainer'
 import { useAuth } from '@/hooks/auth'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Button, Col, Row, Toast, ToastBody, ToastContainer, ToastHeader } from 'react-bootstrap'
+import {
+  Button,
+  Col,
+  Row,
+  Toast,
+  ToastBody,
+  ToastContainer,
+  ToastHeader,
+} from 'react-bootstrap'
 
 export default function AccountData() {
   const { user } = useAuth({ middleware: 'auth' })
   const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
 
   useEffect(() => {
     if (localStorage.getItem('usernameUpdated') === 'true') {
+      setToastMessage('Username updated successfully')
       setShowToast(true)
       localStorage.removeItem('usernameUpdated')
+    } else if (localStorage.getItem('phoneUpdated') === 'true') {
+      setToastMessage('Phone number updated successfully')
+      setShowToast(true)
+      localStorage.removeItem('phoneUpdated')
     }
   }, [])
 
   if (user) {
     const email = user.email || 'Not set'
-    const phoneNumber = user.phone_number || 'Not set'
+    const phone = user.phone || 'Not set'
     const username = user.username || 'Not set'
     const isEmailVerified = user.email_verified_at
 
@@ -66,7 +80,7 @@ export default function AccountData() {
           <Row className="align-items-center">
             <Col className="d-flex flex-column">
               <span>Phone number</span>
-              <small className="text-body-tertiary">{phoneNumber}</small>
+              <small className="text-body-tertiary">{phone}</small>
             </Col>
             <Col className="col-auto">
               <Button
@@ -106,12 +120,12 @@ export default function AccountData() {
             show={showToast}
             delay={5000}
             autohide
-            className='p-0'>
+            className="p-0">
             <ToastHeader>
               <i className="bi bi-check-circle-fill text-success me-2" />
               <strong className="me-auto">Success</strong>
             </ToastHeader>
-            <ToastBody>Username updated successfully</ToastBody>
+            <ToastBody>{toastMessage}</ToastBody>
           </Toast>
         </ToastContainer>
       </>

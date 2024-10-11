@@ -18,139 +18,94 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       .then(res => res.data)
       .catch(error => {
         if (error.response.status !== 409) throw error
-
         router.push('/verify-email')
       }),
   )
 
   const csrf = () => axios.get('/sanctum/csrf-cookie')
 
-  const register = async ({ setErrors, setLoading, ...props }) => {
+  const initializeRequest = async (setLoading, setErrors, setStatus = null) => {
     setLoading(true)
     await csrf()
-
     setErrors([])
+    if (setStatus) setStatus(null)
+  }
 
-    axios
-      .post('/register', props)
-      .then(() => {
-        mutate()
-        setLoading(false)
-      })
-      .catch(error => {
-        setLoading(false)
-        if (error.response.status !== 422) throw error
-
-        setErrors(error.response.data.errors)
-      })
+  const register = async ({ setErrors, setLoading, ...props }) => {
+    try {
+      await initializeRequest(setLoading, setErrors)
+      await axios.post('/register', props)
+      mutate()
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      if (error.response.status !== 422) throw error
+      setErrors(error.response.data.errors)
+    }
   }
 
   const login = async ({ setErrors, setLoading, setStatus, ...props }) => {
-    setLoading(true)
-    await csrf()
-
-    setErrors([])
-    setStatus(null)
-
-    axios
-      .post('/login', props)
-      .then(() => {
-        mutate()
-        setLoading(false)
-      })
-      .catch(error => {
-        setLoading(false)
-        if (error.response.status !== 422) throw error
-
-        setErrors(error.response.data.errors)
-      })
+    try {
+      await initializeRequest(setLoading, setErrors, setStatus)
+      await axios.post('/login', props)
+      mutate()
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      if (error.response.status !== 422) throw error
+      setErrors(error.response.data.errors)
+    }
   }
 
   const forgotPassword = async ({ setErrors, setStatus, email }) => {
-    await csrf()
-
-    setErrors([])
-    setStatus(null)
-
-    axios
-      .post('/forgot-password', { email })
-      .then(response => setStatus(response.data.status))
-      .catch(error => {
-        if (error.response.status !== 422) throw error
-
-        setErrors(error.response.data.errors)
-      })
+    try {
+      await initializeRequest(null, setErrors, setStatus)
+      const response = await axios.post('/forgot-password', { email })
+      setStatus(response.data.status)
+    } catch (error) {
+      if (error.response.status !== 422) throw error
+      setErrors(error.response.data.errors)
+    }
   }
 
   const resetPassword = async ({ setErrors, setStatus, ...props }) => {
-    await csrf()
-
-    setErrors([])
-    setStatus(null)
-
-    axios
-      .post('/reset-password', { token: params.token, ...props })
-      .then(response =>
-        router.push('/login?reset=' + btoa(response.data.status)),
-      )
-      .catch(error => {
-        if (error.response.status !== 422) throw error
-
-        setErrors(error.response.data.errors)
+    try {
+      await initializeRequest(null, setErrors, setStatus)
+      const response = await axios.post('/reset-password', {
+        token: params.token,
+        ...props,
       })
+      router.push('/login?reset=' + btoa(response.data.status))
+    } catch (error) {
+      if (error.response.status !== 422) throw error
+      setErrors(error.response.data.errors)
+    }
   }
 
-  const resendEmailVerification = ({ setStatus }) => {
-    axios
-      .post('/email/verification-notification')
-      .then(response => setStatus(response.data.status))
+  const resendEmailVerification = async ({ setStatus }) => {
+    const response = await axios.post('/email/verification-notification')
+    setStatus(response.data.status)
   }
 
   const logout = async () => {
     if (!error) {
-      await axios.post('/logout').then(() => mutate())
+      await axios.post('/logout')
+      mutate()
     }
-
-    window.location.pathname = '/login'
-  }
-
-  const updateProfile = async ({ setErrors, setLoading, ...props }) => {
-    setLoading(true)
-    await csrf()
-
-    setErrors([])
-
-    return axios
-      .patch('/api/profile', props)
-      .then(() => {
-        mutate()
-        setLoading(false)
-        return true
-      })
-      .catch(error => {
-        setLoading(false)
-        if (error.response.status !== 422) throw error
-
-        setErrors(error.response.data.errors)
-        return false
-      })
+    router.push('/login')
   }
 
   useEffect(() => {
-    //
     if (middleware === 'guest' && redirectIfAuthenticated && user)
       router.push(redirectIfAuthenticated)
 
-    // Redirigir si el usuario está en la página de verificación pero ya ha verificado su correo
     if (window.location.pathname === '/verify-email' && user?.email_verified_at)
       router.push(redirectIfAuthenticated)
 
-    // Middleware de autenticación: Redirigir si no está autenticado
     if (middleware === 'auth' && error) logout()
 
-    // Middleware de verificación: Redirigir si el usuario no ha verificado su email
     if (middleware === 'verified' && user && !user?.email_verified_at)
-      router.push('/verify-email')
+      router.push(redirectIfAuthenticated)
   }, [user, error])
 
   return {
@@ -162,6 +117,5 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     resetPassword,
     resendEmailVerification,
     logout,
-    updateProfile,
   }
 }

@@ -63,7 +63,7 @@ export default function MyProfile() {
             />
           </Col>
           <Col className="d-flex flex-column">
-            <h5 className="mb-0">{user?.display_name}</h5>
+            <h5 className="mb-0">{user?.display_name || `@${user?.username}`}</h5>
             <p className="text-muted mb-0">{user?.email}</p>
           </Col>
         </Row>
