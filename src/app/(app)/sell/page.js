@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/auth'
 
 export default function SellPage() {
   const { user } = useAuth({ middleware: 'auth' })
-  useAuth({ middleware: 'verified', redirectIfAuthenticated: '/verify-email' })
+  /* useAuth({ middleware: 'verified', redirectIfAuthenticated: '/verify-email' }) */
 
   return (
     <>

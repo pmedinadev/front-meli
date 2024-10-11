@@ -57,7 +57,7 @@ export default function Navigation() {
                 View all categories
               </DropdownItem>
             </NavDropdown>
-            <NavLink as={Link} href="/">
+            <NavLink as={Link} href="/sell">
               Sell
             </NavLink>
             <NavLink as={Link} href="/">
