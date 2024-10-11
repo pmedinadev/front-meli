@@ -31,9 +31,9 @@ const LoginLinks = () => {
                 width={22}
                 height={22}
                 alt={`@${user.name}'s profile picture`}
-                className="user-image rounded-circle me-2"
+                className="user-image rounded-circle"
               />
-              <span>{user.name}</span>
+              <span className="ms-2">{user?.display_name}</span>
             </DropdownToggle>
             <DropdownMenu as="ul" className="border-0 shadow-sm">
               <li>

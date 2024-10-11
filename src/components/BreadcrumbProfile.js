@@ -21,14 +21,25 @@ export default function BreadcrumbProfile() {
         <BreadcrumbItem linkAs={Link} href="/profile">
           My profile
         </BreadcrumbItem>
-        <BreadcrumbItem
-          linkAs={Link}
-          href="/profile/personal-information"
-          active={pathname === '/profile/personal-information'}>
-          Personal information
-        </BreadcrumbItem>
-        {pathname === '/profile/personal-information/personal-data' && (
-          <BreadcrumbItem active>Personal data</BreadcrumbItem>
+        {pathname.startsWith('/profile/personal-information') && (
+          <BreadcrumbItem
+            linkAs={Link}
+            href="/profile/personal-information"
+            active={pathname === '/profile/personal-information'}>
+            Personal information
+          </BreadcrumbItem>
+        )}
+        {pathname.startsWith('/profile/personal-data') && (
+          <BreadcrumbItem
+            linkAs={Link}
+            href="/profile/personal-data"
+            active={pathname === '/profile/personal-data'}>
+            Personal data
+          </BreadcrumbItem>
+        )}
+        {pathname ===
+          '/profile/data-correction' && (
+          <BreadcrumbItem active>Data correction</BreadcrumbItem>
         )}
       </Breadcrumb>
     </small>

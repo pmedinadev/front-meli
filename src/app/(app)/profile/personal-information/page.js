@@ -8,27 +8,32 @@ import { Col, Row, Stack } from 'react-bootstrap'
 export default function PersonalInformation() {
   const { user } = useAuth({ middleware: 'auth' })
 
+  const fullName =
+      user?.first_name && user?.last_name && user?.second_last_name
+        ? `${user?.first_name} ${user?.last_name} ${user?.second_last_name}`
+        : 'Full name not set'
+
   const options = [
     {
       icon: 'person',
       title: 'Personal data',
-      subtitle: `${user?.name}`,
-      href: '/profile/personal-information/personal-data',
+      subtitle: `${fullName}`,
+      href: '/profile/personal-data',
     },
     {
       icon: 'receipt',
       title: 'Tax data',
       subtitle: 'The data we use to calculate taxes and issue invoices.',
-      href: '/profile/personal-information/tax-data',
-    }
+      href: '/profile/tax-data',
+    },
   ]
 
   if (user) {
     return (
       <>
-        <h3 className="mt-4">Manage your information</h3>
+        <h4>Manage your information</h4>
 
-        <CardContainer className="mt-4 px-5 py-4">
+        <CardContainer className="mt-4 p-4">
           <Stack gap={5}>
             {options.map((item, index) => (
               <Row
