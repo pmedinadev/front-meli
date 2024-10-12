@@ -48,7 +48,7 @@ export default function PhoneNumber() {
       <>
         <div className="d-flex flex-column align-items-center">
           <Row className="g-0 w-50">
-            <CardContainer className="p-5">
+            <CardContainer className="bg-body p-5">
               <h5 className="mb-4 fw-bold">Enter your phone number</h5>
               <Form onSubmit={handleSubmit}>
                 <FormGroup className="mb-4">

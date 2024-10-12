@@ -41,7 +41,7 @@ export default function AccountData() {
       <>
         <h4>Account data</h4>
 
-        <CardContainer className="mt-4">
+        <CardContainer className="bg-body mt-4">
           <div className="d-flex align-items-center px-4 py-2">
             {isEmailVerified ? (
               <>
@@ -76,7 +76,7 @@ export default function AccountData() {
           </Row>
         </CardContainer>
 
-        <CardContainer className="mt-3 p-4">
+        <CardContainer className="bg-body mt-3 p-4">
           <Row className="align-items-center">
             <Col className="d-flex flex-column">
               <span>Phone number</span>
@@ -95,7 +95,7 @@ export default function AccountData() {
           </Row>
         </CardContainer>
 
-        <CardContainer className="mt-3 p-4">
+        <CardContainer className="bg-body mt-3 p-4">
           <Row className="align-items-center">
             <Col className="d-flex flex-column">
               <span>Username</span>

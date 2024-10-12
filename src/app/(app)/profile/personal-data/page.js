@@ -16,6 +16,10 @@ export default function PersonalInformation() {
       setToastMessage('Display name updated successfully')
       setShowToast(true)
       localStorage.removeItem('displayNameUpdated')
+    } else if (localStorage.getItem('dataUpdated') === 'true') {
+      setToastMessage('Personal data updated successfully')
+      setShowToast(true)
+      localStorage.removeItem('dataUpdated')
     }
   }, [])
 
@@ -32,7 +36,7 @@ export default function PersonalInformation() {
       <>
         <h4>Personal data</h4>
 
-        <CardContainer className="mt-4 p-4">
+        <CardContainer className="bg-body mt-4 p-4">
           <Row className="align-items-center">
             <Col className="d-flex flex-column">
               <span>Full name</span>
@@ -55,7 +59,7 @@ export default function PersonalInformation() {
           </Row>
         </CardContainer>
 
-        <CardContainer className="mt-3 p-4">
+        <CardContainer className="bg-body mt-3 p-4">
           <Row className="align-items-center">
             <Col className="d-flex flex-column">
               <span>Display name</span>

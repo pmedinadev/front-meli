@@ -63,7 +63,7 @@ export default function DisplayName() {
               We will only use your full name if required for legal
               reasons.
             </p>
-            <CardContainer className="p-4">
+            <CardContainer className="bg-body p-4">
               <Form onSubmit={handleSubmit}>
                 <FormGroup className="mb-4">
                   <FormLabel className="text-muted">Display name</FormLabel>
@@ -89,7 +89,7 @@ export default function DisplayName() {
                   variant="link"
                   size="sm"
                   as={Link}
-                  href="/profile"
+                  href="/profile/personal-data"
                   className="text-decoration-none fw-medium ms-3">
                   Go back
                 </Button>
