@@ -70,7 +70,7 @@ export default function Navigation() {
             size="lg"
             as={Link}
             title='Cart'
-            href="/"
+            href="/cart"
             className="link-body-emphasis ms-3 p-0">
             <i className="bi bi-cart" />
           </Button>
