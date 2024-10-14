@@ -33,7 +33,7 @@ export default function PersonalInformation() {
       <>
         <h4>Manage your information</h4>
 
-        <CardContainer className="mt-4 p-4">
+        <CardContainer className="bg-body mt-4 p-4">
           <Stack gap={5}>
             {options.map((item, index) => (
               <Row

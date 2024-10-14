@@ -50,7 +50,7 @@ export default function MyProfile() {
   return (
     <>
       {/* Perfil */}
-      <CardContainer className="px-4 py-2">
+      <CardContainer className="bg-body px-4 py-2">
         <Row className="g-0 d-flex align-items-center">
           <Col className="col-auto me-4">
             <Image
@@ -70,7 +70,7 @@ export default function MyProfile() {
       </CardContainer>
 
       {/* Opciones */}
-      <CardContainer className="mt-3 p-4">
+      <CardContainer className="bg-body mt-3 p-4">
         <Stack gap={5}>
           {options.map((item, index) => (
             <Row

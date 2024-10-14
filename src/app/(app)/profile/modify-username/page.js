@@ -56,7 +56,7 @@ export default function ModifyUsername() {
         <div className="d-flex flex-column align-items-center">
           <Row className="g-0 w-50">
             <h4 className="mb-4">Enter a new username</h4>
-            <CardContainer className="p-4">
+            <CardContainer className="bg-body p-4">
               <Form onSubmit={handleSubmit}>
                 <FormGroup className="mb-4">
                   <div className="d-flex justify-content-between">

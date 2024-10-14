@@ -2,7 +2,9 @@
 
 import CardContainer from '@/components/layout/CardContainer'
 import { useAuth } from '@/hooks/auth'
+import { useProfile } from '@/hooks/useProfile'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import {
   Button,
@@ -15,14 +17,17 @@ import {
 } from 'react-bootstrap'
 
 export default function DataCorrection() {
-  const { user, updateProfile } = useAuth({ middleware: 'auth' })
+  const { user } = useAuth({ middleware: 'auth' })
+  const { updateProfile, loading, errors } = useProfile()
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     second_last_name: '',
   })
-  const [errors, setErrors] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [originalFirstName, setOriginalFirstName] = useState('')
+  const [originalLastName, setOriginalLastName] = useState('')
+  const [originalSecondLastName, setOriginalSecondLastName] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
     if (user) {
@@ -31,6 +36,9 @@ export default function DataCorrection() {
         last_name: user.last_name,
         second_last_name: user.second_last_name,
       })
+      setOriginalFirstName(user.first_name)
+      setOriginalLastName(user.last_name)
+      setOriginalSecondLastName(user.second_last_name)
     }
   }, [user])
 
@@ -41,9 +49,13 @@ export default function DataCorrection() {
     })
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    updateProfile({ ...formData, setErrors, setLoading })
+    const success = await updateProfile({ ...formData })
+    if (success) {
+      localStorage.setItem('dataUpdated', 'true')
+      router.push('/profile/personal-data')
+    }
   }
 
   if (user) {
@@ -51,8 +63,10 @@ export default function DataCorrection() {
       <>
         <Row className="g-0">
           <h3 className="text-center mt-1">Correct your name</h3>
-          <Form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
-            <CardContainer className="mt-4 p-4 w-50">
+          <Form
+            onSubmit={handleSubmit}
+            className="d-flex flex-column align-items-center">
+            <CardContainer className="bg-body mt-4 p-4 w-50">
               <FormGroup className="mb-4">
                 <FormLabel className="text-muted">First name</FormLabel>
                 <FormControl
@@ -111,14 +125,19 @@ export default function DataCorrection() {
                 variant="link"
                 size="sm"
                 as={Link}
-                href="/profile"
+                href="/profile/personal-data"
                 className="text-decoration-none fw-medium me-4">
                 Go back
               </Button>
               <Button
                 size="sm"
                 type="submit"
-                disabled={loading}
+                disabled={
+                  loading ||
+                  (formData.first_name === originalFirstName &&
+                    formData.last_name === originalLastName &&
+                    formData.second_last_name === originalSecondLastName)
+                }
                 className="py-2 px-4 fw-medium">
                 {loading ? 'Loading...' : 'Save'}
               </Button>

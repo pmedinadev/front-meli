@@ -48,8 +48,8 @@ const Home = () => {
 
       {/* Sección de productos */}
       <Container>
-        <CardContainer className="p-4 mt-4">
-          <h4>Productos</h4>
+        <CardContainer className="bg-body p-4 mt-4">
+          <h4>Products</h4>
           <div className="d-flex mt-3">
             <Card border="0" style={{ width: '12rem' }}>
               <CardImg
