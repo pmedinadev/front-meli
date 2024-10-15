@@ -5,7 +5,7 @@ export default function LoadingSpinner() {
     <div className="text-center">
       <div className="d-inline-flex bg-body rounded-circle p-2">
         <Spinner animation="border" variant="primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">Cargando...</span>
         </Spinner>
       </div>
     </div>

@@ -34,6 +34,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
   const register = async ({ setErrors, setLoading, ...props }) => {
     try {
       await initializeRequest(setLoading, setErrors)
+      console.log('Payload:', props) // Verificar el payload
       await axios.post('/register', props)
       mutate()
       setLoading(false)

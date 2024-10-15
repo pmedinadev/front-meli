@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Complete the information to create your account',
+  title: 'Completa los datos para crear tu cuenta',
 }
 
 export default function RegisterLayout ({ children }) {
