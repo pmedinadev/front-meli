@@ -49,7 +49,7 @@ const Home = () => {
       {/* Sección de productos */}
       <Container>
         <CardContainer className="bg-body p-4 mt-4">
-          <h4>Products</h4>
+          <h4>Productos</h4>
           <div className="d-flex mt-3">
             <Card border="0" style={{ width: '12rem' }}>
               <CardImg
@@ -60,7 +60,7 @@ const Home = () => {
               />
               <CardBody>
                 <p>Audífonos bluetooth</p>
-                <h3 className="mb-0">1,500</h3>
+                <h3 className="mb-0">$1,500</h3>
               </CardBody>
             </Card>
             <Card border="0" style={{ width: '12rem' }}>
@@ -72,7 +72,7 @@ const Home = () => {
               />
               <CardBody>
                 <p>Audífonos bluetooth</p>
-                <h3 className="mb-0">1,500</h3>
+                <h3 className="mb-0">$1,500</h3>
               </CardBody>
             </Card>
             <Card border="0" style={{ width: '12rem' }}>
@@ -84,7 +84,7 @@ const Home = () => {
               />
               <CardBody>
                 <p>Audífonos bluetooth</p>
-                <h3 className="mb-0">1,500</h3>
+                <h3 className="mb-0">$1,500</h3>
               </CardBody>
             </Card>
             <Card border="0" style={{ width: '12rem' }}>
@@ -96,7 +96,7 @@ const Home = () => {
               />
               <CardBody>
                 <p>Audífonos bluetooth</p>
-                <h3 className="mb-0">1,500</h3>
+                <h3 className="mb-0">$1,500</h3>
               </CardBody>
             </Card>
             <Card border="0" style={{ width: '12rem' }}>
@@ -108,7 +108,7 @@ const Home = () => {
               />
               <CardBody>
                 <p>Audífonos bluetooth</p>
-                <h3 className="mb-0">1,500</h3>
+                <h3 className="mb-0">$1,500</h3>
               </CardBody>
             </Card>
             <Card border="0" style={{ width: '12rem' }}>
@@ -120,7 +120,7 @@ const Home = () => {
               />
               <CardBody>
                 <p>Audífonos bluetooth</p>
-                <h3 className="mb-0">1,500</h3>
+                <h3 className="mb-0">$1,500</h3>
               </CardBody>
             </Card>
           </div>

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Enter your Mercado Libre e-mail',
+  title: 'Ingresar tu e-mail para iniciar sesión',
 }
 
 const LoginLayout = ({ children }) => {

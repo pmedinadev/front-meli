@@ -14,3 +14,7 @@
   width: 100%;
   height: auto;
 }
+
+.sidebar-container {
+  height: calc(100vh - 56px); /* 56px la altura del header */
+}
