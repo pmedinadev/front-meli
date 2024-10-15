@@ -1,8 +1,20 @@
+'use client'
 import CardContainer from '@/components/layout/CardContainer'
 import CartIcon from '@/components/svg/CartIcon'
 import { Button, Col, Container, Row } from 'react-bootstrap'
+import { useAuth } from '@/hooks/auth'
+import LoadingSpinner from '@/components/layout/LoadingSpinner'
+
+// export const metadata = {
+//   title: 'Shopping Cart',
+// }
 
 export default function CartPage() {
+  const { user } = useAuth({ middleware: 'auth' })
+
+  if (!user) {
+    return <LoadingSpinner />
+  }
   return (
     <Container className="mt-5">
       <Row className='g-5'>

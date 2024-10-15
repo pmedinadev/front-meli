@@ -48,7 +48,7 @@ export default function Navigation() {
               {isLoading && <DropdownItem>Loading...</DropdownItem>}
               {isError && <DropdownItem>Error loading categories</DropdownItem>}
               {categories && categories.slice(0, 10).map(category => (
-                <DropdownItem key={category.id} as={Link} href={`/category/${category.id}`}>
+                <DropdownItem key={category.id} as={Link} href={/category/${category.id}}>
                   {category.name}
                 </DropdownItem>
               ))}
