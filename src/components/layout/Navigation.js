@@ -43,10 +43,10 @@ export default function Navigation() {
         <NavbarCollapse id="navbarSupportedContent">
           <Nav as="nav" className="me-auto mb-2 mb-lg-0">
             <NavDropdown
-              title="Categories"
+              title="Categorías"
               className="link-body-emphasis border-0">
-              {isLoading && <DropdownItem>Loading...</DropdownItem>}
-              {isError && <DropdownItem>Error loading categories</DropdownItem>}
+              {isLoading && <DropdownItem>Cargando...</DropdownItem>}
+              {isError && <DropdownItem>Error cargando categorías</DropdownItem>}
               {categories && categories.slice(0, 10).map(category => (
                 <DropdownItem key={category.id} as={Link} href={`/category/${category.id}`}>
                   {category.name}
@@ -54,14 +54,14 @@ export default function Navigation() {
               ))}
               <DropdownDivider />
               <DropdownItem as={Link} href="/categories">
-                View all categories
+                Ver más categorías
               </DropdownItem>
             </NavDropdown>
             <NavLink as={Link} href="/">
-              Sell
+              Vender
             </NavLink>
             <NavLink as={Link} href="/">
-              Help
+              Ayuda
             </NavLink>
           </Nav>
           <LoginLinks />
@@ -69,7 +69,7 @@ export default function Navigation() {
             variant="link"
             size="lg"
             as={Link}
-            title='Cart'
+            title='Carrito'
             href="/cart"
             className="link-body-emphasis ms-3 p-0">
             <i className="bi bi-cart" />
