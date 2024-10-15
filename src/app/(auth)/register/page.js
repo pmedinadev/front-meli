@@ -12,8 +12,8 @@ const Page = () => {
     redirectIfAuthenticated: '/',
   })
 
-  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [errors, setErrors] = useState([])
@@ -23,8 +23,8 @@ const Page = () => {
     event.preventDefault()
 
     register({
-      name,
       email,
+      username,
       password,
       password_confirmation: passwordConfirmation,
       setErrors,
@@ -34,10 +34,10 @@ const Page = () => {
 
   return (
     <form onSubmit={submitForm}>
-      {/* Email Address */}
+      {/* E-mail */}
       <div>
         <FormGroup className="mb-3">
-          <FormLabel>Add your e-mail</FormLabel>
+          <FormLabel>Agrega tu e-mail</FormLabel>
           <FormControl
             id="email"
             type="email"
@@ -53,28 +53,28 @@ const Page = () => {
         </FormGroup>
       </div>
 
-      {/* Name */}
+      {/* Nombre de usuario */}
       <div>
         <FormGroup className="mb-3">
-          <FormLabel>Choose a name</FormLabel>
+          <FormLabel>Elige un nombre de usuario</FormLabel>
           <FormControl
-            id="name"
+            id="username"
             type="text"
-            value={name}
-            onChange={event => setName(event.target.value)}
+            value={username}
+            onChange={event => setUsername(event.target.value)}
             required
-            isInvalid={!!errors.name}
+            isInvalid={!!errors.username}
           />
           <FormControl.Feedback type="invalid">
-            {errors.name}
+            {errors.username}
           </FormControl.Feedback>
         </FormGroup>
       </div>
 
-      {/* Password */}
+      {/* Contraseña */}
       <div>
         <FormGroup className="mb-3">
-          <FormLabel>Create your password</FormLabel>
+          <FormLabel>Crea tu contraseña</FormLabel>
           <FormControl
             id="password"
             type="password"
@@ -90,10 +90,10 @@ const Page = () => {
         </FormGroup>
       </div>
 
-      {/* Confirm Password */}
+      {/* Confirmar contraseña */}
       <div>
         <FormGroup className="mb-3">
-          <FormLabel>Confirm your password</FormLabel>
+          <FormLabel>Confirma tu contraseña</FormLabel>
           <FormControl
             id="passwordConfirmation"
             type="password"
@@ -112,16 +112,16 @@ const Page = () => {
         <Button disabled={loading} className="btn btn-primary">
           {loading ? (
             <>
-              <Spinner animation="border" size="sm" /> Loading...
+              <Spinner animation="border" size="sm" /> Cargando...
             </>
           ) : (
-            'Register'
+            'Registrarme'
           )}
         </Button>
         <Link
           href="/login"
           className="link-primary link-underline link-underline-opacity-0 link-underline-opacity-100-hover ms-3">
-          Already registered?
+          ¿Ya estás registrado?
         </Link>
       </div>
     </form>

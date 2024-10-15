@@ -38,12 +38,12 @@ const LoginLinks = () => {
             <DropdownMenu as="ul" className="border-0 shadow-sm">
               <li>
                 <DropdownItem as={Link} href="/profile">
-                  My profile
+                  Mi perfil
                 </DropdownItem>
               </li>
               <DropdownDivider />
               <li>
-                <DropdownItem onClick={logout}>Log out</DropdownItem>
+                <DropdownItem onClick={logout}>Salir</DropdownItem>
               </li>
             </DropdownMenu>
           </Dropdown>
@@ -61,13 +61,13 @@ const LoginLinks = () => {
           <Link
             href="/register"
             className="link-body-emphasis text-decoration-none me-3">
-            Create account
+            Crea tu cuenta
           </Link>
 
           <Link
             href="/login"
             className="link-body-emphasis text-decoration-none">
-            Log in
+            Ingresa
           </Link>
         </>
       )}

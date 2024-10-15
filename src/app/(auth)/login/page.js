@@ -55,7 +55,7 @@ const Login = () => {
     <>
       <AuthSessionStatus className="mb-4" status={status} />
       <form onSubmit={submitForm}>
-        {/* Email Address */}
+        {/* E-mail */}
         <div>
           <FormGroup>
             <FormLabel>E-mail</FormLabel>
@@ -74,10 +74,10 @@ const Login = () => {
           </FormGroup>
         </div>
 
-        {/* Password */}
+        {/* Contraseña */}
         <div className="mt-4">
           <FormGroup>
-            <FormLabel>Password</FormLabel>
+            <FormLabel>Contraseña</FormLabel>
             <FormControl
               id="password"
               type="password"
@@ -93,11 +93,11 @@ const Login = () => {
           </FormGroup>
         </div>
 
-        {/* Remember Me */}
+        {/* Recuérdame */}
         <div className="mt-4">
           <FormCheck
             type="checkbox"
-            label="Remember me"
+            label="Recuérdame"
             id="remember_me"
             name="remember"
             onChange={event => setShouldRemember(event.target.checked)}
@@ -108,10 +108,10 @@ const Login = () => {
           <Button disabled={loading} className="btn btn-primary">
             {loading ? (
               <>
-                <Spinner animation="border" size="sm" /> Loading...
+                <Spinner animation="border" size="sm" /> Cargando...
               </>
             ) : (
-              'Log in'
+              'Ingresar'
             )}
           </Button>
           <Stack
@@ -121,13 +121,13 @@ const Login = () => {
             <Link
               href="/forgot-password"
               className="link-primary link-underline link-underline-opacity-0 link-underline-opacity-100-hover">
-              Forgot your password?
+              ¿Olvidaste tu contraseña?
             </Link>
             <span className="text-primary">·</span>
             <Link
               href="/register"
               className="link-primary link-underline link-underline-opacity-0 link-underline-opacity-100-hover">
-              Create a new account
+              Crea una nueva cuenta
             </Link>
           </Stack>
         </div>

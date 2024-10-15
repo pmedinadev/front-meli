@@ -1,20 +1,8 @@
-'use client'
 import CardContainer from '@/components/layout/CardContainer'
 import CartIcon from '@/components/svg/CartIcon'
 import { Button, Col, Container, Row } from 'react-bootstrap'
-import { useAuth } from '@/hooks/auth'
-import LoadingSpinner from '@/components/layout/LoadingSpinner'
-
-// export const metadata = {
-//   title: 'Shopping Cart',
-// }
 
 export default function CartPage() {
-  const { user } = useAuth({ middleware: 'auth' })
-
-  if (!user) {
-    return <LoadingSpinner />
-  }
   return (
     <Container className="mt-5">
       <Row className='g-5'>
@@ -25,14 +13,14 @@ export default function CartPage() {
                 <CartIcon />
               </Col>
               <Col>
-                <h6>Add products and get free shipping</h6>
+                <h6>Agrega productos y consigue envío gratis</h6>
                 <small>
-                  To obtain free shipping add products from the same seller.
+                  Para obtener envío gratis, suma productos de un mismo vendedor.
                 </small>
               </Col>
               <Col className="col-auto">
                 <Button variant="link" className='text-decoration-none'>
-                  <small className='fw-medium'>Discover products</small>
+                  <small className='fw-medium'>Descubrir productos</small>
                 </Button>
               </Col>
             </Row>
@@ -41,13 +29,12 @@ export default function CartPage() {
         <Col className="col-4">
           <CardContainer className="bg-disabled-meli d-flex flex-column justify-content-center h-100 text-body-tertiary">
             <div className="p-4">
-              <h6 className="mb-0">Purchase summary</h6>
+              <h6 className="mb-0">Resumen de compra</h6>
             </div>
             <hr className="m-0" />
             <div className="p-4">
               <small>
-                Here you will see the amounts of your purchase once you add
-                products.
+                Aquí verás los importes de tu compra una vez que agregues productos.
               </small>
             </div>
           </CardContainer>
