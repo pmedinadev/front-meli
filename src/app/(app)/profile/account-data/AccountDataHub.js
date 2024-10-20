@@ -22,23 +22,23 @@ export default function AccountDataHub() {
 
   useEffect(() => {
     if (localStorage.getItem('usernameUpdated') === 'true') {
-      setToastMessage('Username updated successfully')
+      setToastMessage('Usuario actualizado correctamente')
       setShowToast(true)
       localStorage.removeItem('usernameUpdated')
     } else if (localStorage.getItem('phoneUpdated') === 'true') {
-      setToastMessage('Phone number updated successfully')
+      setToastMessage('Teléfono actualizado correctamente')
       setShowToast(true)
       localStorage.removeItem('phoneUpdated')
     } else if (localStorage.getItem('emailUpdated') === 'true') {
-      setToastMessage('E-mail updated successfully')
+      setToastMessage('E-mail actualizado correctamente')
       setShowToast(true)
       localStorage.removeItem('emailUpdated')
     }
   }, [])
 
-  const email = user?.email || 'Not set'
-  const phone = user?.phone || 'Not set'
-  const username = user?.username || 'Not set'
+  const email = user?.email || 'No proporcionado'
+  const phone = user?.phone || 'No proporcionado'
+  const username = user?.username || 'No proporcionado'
   const isEmailVerified = user?.email_verified_at
 
   if (!user) {
@@ -49,6 +49,7 @@ export default function AccountDataHub() {
     <>
       <h4>Datos de tu cuenta</h4>
 
+      {/* E-mail */}
       <CardContainer className="bg-body mt-4">
         <div className="d-flex align-items-center px-4 py-2">
           {isEmailVerified ? (
@@ -84,6 +85,7 @@ export default function AccountDataHub() {
         </Row>
       </CardContainer>
 
+      {/* Teléfono */}
       <CardContainer className="bg-body mt-3 p-4">
         <Row className="align-items-center">
           <Col className="d-flex flex-column">
@@ -103,6 +105,7 @@ export default function AccountDataHub() {
         </Row>
       </CardContainer>
 
+      {/* Nombre de usuario */}
       <CardContainer className="bg-body mt-3 p-4">
         <Row className="align-items-center">
           <Col className="d-flex flex-column">
@@ -122,6 +125,26 @@ export default function AccountDataHub() {
         </Row>
       </CardContainer>
 
+      {/* Contraseña */}
+      <CardContainer className="bg-body mt-3 p-4">
+        <Row className="align-items-center">
+          <Col className="d-flex flex-column">
+            <span>Contraseña</span>
+            <small className="text-body-tertiary">********</small>
+          </Col>
+          <Col className="col-auto">
+            <Button
+              variant="link"
+              size="sm"
+              as={Link}
+              href="/profile/modify-password"
+              className="text-decoration-none fw-medium">
+              Modificar
+            </Button>
+          </Col>
+        </Row>
+      </CardContainer>
+
       <ToastContainer position="bottom-end" className="p-4">
         <Toast
           onClose={() => setShowToast(false)}
@@ -131,7 +154,7 @@ export default function AccountDataHub() {
           className="p-0">
           <ToastHeader>
             <i className="bi bi-check-circle-fill text-success me-2" />
-            <strong className="me-auto">Success</strong>
+            <strong className="me-auto">Éxito</strong>
           </ToastHeader>
           <ToastBody>{toastMessage}</ToastBody>
         </Toast>

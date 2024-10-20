@@ -34,7 +34,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
   const register = async ({ setErrors, setLoading, ...props }) => {
     try {
       await initializeRequest(setLoading, setErrors)
-      console.log('Payload:', props) // Verificar el payload
       await axios.post('/register', props)
       mutate()
       setLoading(false)
@@ -88,6 +87,20 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     setStatus(response.data.status)
   }
 
+  const updatePassword = async ({ setErrors, setLoading, ...props }) => {
+    try {
+      await initializeRequest(setLoading, setErrors)
+      await axios.put('/password', props)
+      setLoading(false)
+      localStorage.setItem('password-updated', 'true')
+      window.location.pathname = '/login'
+    } catch (error) {
+      setLoading(false)
+      if (error.response.status !== 422) throw error
+      setErrors(error.response.data.errors)
+    }
+  }
+
   const logout = async () => {
     if (!error) {
       await axios.post('/logout')
@@ -117,6 +130,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     forgotPassword,
     resetPassword,
     resendEmailVerification,
+    updatePassword,
     logout,
   }
 }

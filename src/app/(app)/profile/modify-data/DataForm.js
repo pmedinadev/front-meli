@@ -24,29 +24,34 @@ export default function DataForm() {
     first_name: '',
     last_name: '',
     second_last_name: '',
+    identity_document: '',
   })
   const [originalFirstName, setOriginalFirstName] = useState('')
   const [originalLastName, setOriginalLastName] = useState('')
   const [originalSecondLastName, setOriginalSecondLastName] = useState('')
+  const [originalIdentityDocument, setOriginalIdentityDocument] = useState('')
   const router = useRouter()
 
   useEffect(() => {
     if (user) {
       setFormData({
-        first_name: user.first_name,
-        last_name: user.last_name,
-        second_last_name: user.second_last_name,
+        first_name: user?.first_name,
+        last_name: user?.last_name,
+        second_last_name: user?.second_last_name,
+        identity_document: user?.identity_document,
       })
-      setOriginalFirstName(user.first_name)
-      setOriginalLastName(user.last_name)
-      setOriginalSecondLastName(user.second_last_name)
+      setOriginalFirstName(user?.first_name)
+      setOriginalLastName(user?.last_name)
+      setOriginalSecondLastName(user?.second_last_name)
+      setOriginalIdentityDocument(user?.identity_document)
     }
   }, [user])
 
   const handleChange = e => {
+    const { name, value } = e.target
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: name === 'identity_document' ? value.toUpperCase() : value,
     })
   }
 
@@ -119,7 +124,16 @@ export default function DataForm() {
                 <FormLabel className="text-muted">
                   Documento de identidad
                 </FormLabel>
-                <FormControl type="text" />
+                <FormControl
+                  type="text"
+                  name="identity_document"
+                  value={formData.identity_document}
+                  onChange={handleChange}
+                  isInvalid={!!errors.identity_document}
+                />
+                <FormControl.Feedback type="invalid">
+                  {errors.identity_document}
+                </FormControl.Feedback>
               </FormGroup>
             </Row>
           </CardContainer>
@@ -140,7 +154,8 @@ export default function DataForm() {
                 loading ||
                 (formData.first_name === originalFirstName &&
                   formData.last_name === originalLastName &&
-                  formData.second_last_name === originalSecondLastName)
+                  formData.second_last_name === originalSecondLastName &&
+                  formData.identity_document === originalIdentityDocument)
               }
               className="py-2 px-4 fw-medium">
               {loading ? 'Cargando...' : 'Continuar'}
