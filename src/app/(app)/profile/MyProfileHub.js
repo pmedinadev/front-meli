@@ -21,12 +21,6 @@ const options = [
     href: '/profile/account-data',
   },
   {
-    icon: 'lock',
-    title: 'Seguridad',
-    subtitle: 'Configuración de seguridad de tu cuenta.',
-    href: '/profile/security',
-  },
-  {
     icon: 'credit-card',
     title: 'Tarjetas',
     subtitle: 'Tarjetas guardadas en tu cuenta.',

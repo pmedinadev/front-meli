@@ -99,7 +99,7 @@ export default function PersonalDataHub() {
           className="p-0">
           <ToastHeader>
             <i className="bi bi-check-circle-fill text-success me-2" />
-            <strong className="me-auto">Success</strong>
+            <strong className="me-auto">Éxito</strong>
           </ToastHeader>
           <ToastBody>{toastMessage}</ToastBody>
         </Toast>
