@@ -26,8 +26,7 @@ const LoginLinks = () => {
               aria-expanded="false"
               className="link-body-emphasis text-decoration-none p-0">
               <Image
-                // src={user.image_url || '/profile_avatar_placeholder.png'}
-                src="/profile_avatar_placeholder.png"
+                src={user?.avatar || '/profile_avatar_placeholder.png'}
                 width={22}
                 height={22}
                 alt={`@${user.name}'s profile picture`}

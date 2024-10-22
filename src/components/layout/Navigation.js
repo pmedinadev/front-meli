@@ -31,6 +31,7 @@ export default function Navigation() {
               width={159}
               height={40}
               alt="Mercado Libre logo"
+              priority
             />
           </NavbarBrand>
         </Link>
