@@ -4,7 +4,7 @@ import CardContainer from '@/components/layout/CardContainer'
 import LoadingSpinner from '@/components/layout/LoadingSpinner'
 import { useAuth } from '@/hooks/auth'
 import { useProfile } from '@/hooks/useProfile'
-import { CldUploadButton } from 'next-cloudinary'
+import { CldUploadWidget } from 'next-cloudinary'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -15,6 +15,7 @@ import {
   Toast,
   ToastBody,
   ToastContainer,
+  ToastHeader,
 } from 'react-bootstrap'
 
 const options = [
@@ -51,11 +52,10 @@ export default function MyProfileHub() {
   const [toastMessage, setToastMessage] = useState('')
 
   useEffect(() => {
-    const message = localStorage.getItem('toastMessage')
-    if (message) {
-      setToastMessage(message)
+    if (localStorage.getItem('avatarUpdated') === 'true') {
+      setToastMessage('Imagen actualizada correctamente')
       setShowToast(true)
-      localStorage.removeItem('toastMessage')
+      localStorage.removeItem('avatarUpdated')
     }
   }, [])
 
@@ -63,8 +63,11 @@ export default function MyProfileHub() {
     return <LoadingSpinner />
   }
 
-  const handleUpload = async result => {
-    const success = await updateProfile({ avatar: result.info.secure_url })
+  const handleUploadSuccess = async result => {
+    const { secure_url, coordinates } = result.info
+    const [x, y, width, height] = coordinates.custom[0]
+    const croppedImageUrl = `${secure_url.replace('/upload/', `/upload/c_crop,g_custom,x_${x},y_${y},w_${width},h_${height}/`)}`
+    const success = await updateProfile({ avatar: croppedImageUrl })
     if (success) {
       localStorage.setItem('toastMessage', 'Imagen actualizada correctamente')
     } else {
@@ -72,6 +75,10 @@ export default function MyProfileHub() {
     }
     setToastMessage(localStorage.getItem('toastMessage'))
     setShowToast(true)
+  }
+
+  const handleQueuesEnd = (result, { widget }) => {
+    widget.close()
   }
 
   return (
@@ -89,19 +96,38 @@ export default function MyProfileHub() {
                 className="user-image rounded-circle border border-tertiary"
                 priority
               />
-              <CldUploadButton
+              <CldUploadWidget
+                signatureEndpoint="sign-cloudinary-params"
+                options={{
+                  sources: ['local', 'url', 'camera'],
+                  cropping: true,
+                  showSkipCropButton: false,
+                  croppingAspectRatio: 1,
+                  croppingShowDimensions: true,
+                  multiple: false,
+                  publicId: user?.username,
+                }}
                 uploadPreset="ml_default"
-                onSuccess={handleUpload}
-                disabled={loading}
-                className="bg-body border border-tertiary rounded-circle position-absolute translate-middle"
-                style={{
-                  top: '90%',
-                  left: '90%',
-                }}>
-                <small>
-                  <i className="bi bi-camera" />
-                </small>
-              </CldUploadButton>
+                onSuccess={handleUploadSuccess}
+                onQueuesEnd={handleQueuesEnd}>
+                {({ open }) => (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      open()
+                    }}
+                    disabled={loading}
+                    className="bg-body border border-tertiary rounded-circle position-absolute translate-middle"
+                    style={{
+                      top: '90%',
+                      left: '90%',
+                    }}>
+                    <small>
+                      <i className="bi bi-camera" />
+                    </small>
+                  </button>
+                )}
+              </CldUploadWidget>
             </div>
           </Col>
           <Col className="d-flex flex-column">
@@ -140,13 +166,17 @@ export default function MyProfileHub() {
       </CardContainer>
 
       {/* Toast */}
-      <ToastContainer position="top-end" className="p-3">
+      <ToastContainer position="bottom-end" className="p-4">
         <Toast
           onClose={() => setShowToast(false)}
           show={showToast}
-          delay={3000}
+          delay={5000}
           autohide
-          bg={toastMessage.includes('Error') ? 'danger' : 'success'}>
+          className="p-0">
+          <ToastHeader>
+            <i className="bi bi-check-circle-fill text-success me-2" />
+            <strong className="me-auto">Éxito</strong>
+          </ToastHeader>
           <ToastBody>{toastMessage}</ToastBody>
         </Toast>
       </ToastContainer>
