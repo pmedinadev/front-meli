@@ -4,8 +4,7 @@ import CardContainer from '@/components/layout/CardContainer'
 import LoadingSpinner from '@/components/layout/LoadingSpinner'
 import { useAuth } from '@/hooks/auth'
 import { useProfile } from '@/hooks/useProfile'
-import { CldUploadWidget } from 'next-cloudinary'
-import Image from 'next/image'
+import { CldImage, CldUploadWidget } from 'next-cloudinary'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import {
@@ -17,7 +16,9 @@ import {
   ToastContainer,
   ToastHeader,
 } from 'react-bootstrap'
+import cloudinaryText from '@/lib/cloudinary-text.json'
 
+// Opciones de perfil
 const options = [
   {
     icon: 'person-vcard',
@@ -46,11 +47,16 @@ const options = [
 ]
 
 export default function MyProfileHub() {
+  // Hook de autenticación
   const { user } = useAuth({ middleware: 'auth' })
+  // Hook para actualizar el perfil
   const { updateProfile, loading } = useProfile()
+  // Estado para mostrar el toast
   const [showToast, setShowToast] = useState(false)
+  // Mensaje del toast
   const [toastMessage, setToastMessage] = useState('')
 
+  // Efecto para mostrar el mensaje del toast si la imagen se actualizó correctamente
   useEffect(() => {
     if (localStorage.getItem('avatarUpdated') === 'true') {
       setToastMessage('Imagen actualizada correctamente')
@@ -59,15 +65,24 @@ export default function MyProfileHub() {
     }
   }, [])
 
+  // Mostrar spinner de carga si el usuario no está autenticado
   if (!user) {
     return <LoadingSpinner />
   }
 
+  // Manejar el éxito de la subida de la imagen
   const handleUploadSuccess = async result => {
     const { secure_url, coordinates } = result.info
-    const [x, y, width, height] = coordinates.custom[0]
-    const croppedImageUrl = `${secure_url.replace('/upload/', `/upload/c_crop,g_custom,x_${x},y_${y},w_${width},h_${height}/`)}`
-    const success = await updateProfile({ avatar: croppedImageUrl })
+    let imageUrl = secure_url
+
+    // Verificar si hay coordenadas de recorte y aplicarlas
+    if (coordinates && coordinates.custom) {
+      const [x, y, width, height] = coordinates.custom[0]
+      imageUrl = `${secure_url.replace('/upload/', `/upload/c_crop,g_custom,x_${x},y_${y},w_${width},h_${height}/`)}`
+    }
+
+    // Actualizar el perfil del usuario con la URL de la imagen
+    const success = await updateProfile({ avatar: imageUrl })
     if (success) {
       localStorage.setItem('toastMessage', 'Imagen actualizada correctamente')
     } else {
@@ -77,6 +92,7 @@ export default function MyProfileHub() {
     setShowToast(true)
   }
 
+  // Manejar el cierre del widget de Cloudinary
   const handleQueuesEnd = (result, { widget }) => {
     widget.close()
   }
@@ -88,24 +104,28 @@ export default function MyProfileHub() {
         <Row className="g-0 d-flex align-items-center">
           <Col className="col-auto me-4">
             <div className="position-relative">
-              <Image
-                src={user?.avatar || '/profile_avatar_placeholder.png'}
-                width={80}
-                height={80}
+              {/* Mostrar la imagen del usuario o un placeholder */}
+              <CldImage
+                src={user?.avatar || 'users/placeholder'}
+                width="80"
+                height="80"
+                {...(user?.avatar && { preserveTransformations: true })}
                 alt={`@${user?.username}'s profile picture`}
-                className="user-image rounded-circle border border-tertiary"
-                priority
+                className="rounded-circle border border-tertiary"
               />
+              {/* Widget de subida de Cloudinary */}
               <CldUploadWidget
                 signatureEndpoint="sign-cloudinary-params"
                 options={{
-                  sources: ['local', 'url', 'camera'],
+                  sources: ['local'],
                   cropping: true,
                   showSkipCropButton: false,
                   croppingAspectRatio: 1,
                   croppingShowDimensions: true,
                   multiple: false,
                   publicId: user?.username,
+                  text: { ...cloudinaryText },
+                  language: 'es',
                 }}
                 uploadPreset="ml_default"
                 onSuccess={handleUploadSuccess}
@@ -119,8 +139,8 @@ export default function MyProfileHub() {
                     disabled={loading}
                     className="bg-body border border-tertiary rounded-circle position-absolute translate-middle"
                     style={{
-                      top: '90%',
-                      left: '90%',
+                      top: '85%',
+                      left: '85%',
                     }}>
                     <small>
                       <i className="bi bi-camera" />

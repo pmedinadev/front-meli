@@ -19,7 +19,7 @@ import {
 } from 'react-bootstrap'
 
 export default function Navigation() {
-  const { categories, isLoading, isError } = useCategories()
+  const { categories, loading, error } = useCategories()
 
   return (
     <Navbar expand="lg" className="bg-primary-meli">
@@ -46,8 +46,8 @@ export default function Navigation() {
             <NavDropdown
               title="Categorías"
               className="link-body-emphasis border-0">
-              {isLoading && <DropdownItem>Cargando...</DropdownItem>}
-              {isError && <DropdownItem>Error cargando categorías</DropdownItem>}
+              {loading && <DropdownItem>Cargando...</DropdownItem>}
+              {error && <DropdownItem>Error cargando categorías</DropdownItem>}
               {categories && categories.slice(0, 10).map(category => (
                 <DropdownItem key={category.id} as={Link} href={`/category/${category.id}`}>
                   {category.name}
