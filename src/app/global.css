@@ -1,0 +1,20 @@
+.bg-primary-meli {
+  background-color: #fee600;
+}
+
+.bg-body-meli {
+  background-color: #ededed;
+}
+
+.bg-disabled-meli {
+  background-color: #f5f5f5;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
+}
+
+.sidebar-container {
+  height: calc(100vh - 56px); /* 56px la altura del header */
+}
