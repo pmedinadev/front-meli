@@ -1,0 +1,112 @@
+{
+  "es": {
+    "or": "O",
+    "back": "Regresar",
+    "advanced": "Avanzado",
+    "close": "Cerrar",
+    "no_results": "No se encontraron resultados",
+    "search_placeholder": "Buscar",
+    "about_uw": "Acerca del widget",
+    "search": {
+      "placeholder": "Buscar...",
+      "reset": "Reiniciar búsqueda"
+    },
+    "menu": {
+      "files": "Mis archivos",
+      "web": "Dirección web",
+      "camera": "Cámara"
+    },
+    "selection_counter": {
+      "selected": "Seleccionado"
+    },
+    "actions": {
+      "upload": "Subir",
+      "next": "Siguiente",
+      "clear_all": "Limpiar todo",
+      "log_out": "Cerrar sesión"
+    },
+    "local": {
+      "browse": "Buscar",
+      "dd_title_single": "Arrastra y suelta un archivo aquí",
+      "dd_title_multi": "Arrastra y suelta archivos aquí",
+      "drop_title_single": "Arrastra y suelta un archivo para subir",
+      "drop_title_multiple": "Arrastra y suelta archivos para subir"
+    },
+    "url": {
+      "inner_title": "Dirección web de la imagen a subir"
+    },
+    "camera": {
+      "capture": "Capturar",
+      "cancel": "Cancelar",
+      "take_pic": "Tomar foto y subir",
+      "explanation": "Asegúrate de que tu cámara esté encendida y que tu navegador tenga permiso para acceder a ella. Cuando estés listo, haz clic en Capturar.",
+      "camera_error": "Hubo un error al acceder a la cámara",
+      "retry": "Reintentar"
+    },
+    "crop": {
+      "title": "Recortar",
+      "crop_btn": "Recortar",
+      "skip_btn": "Saltar",
+      "reset_btn": "Reiniciar",
+      "close_btn": "Sí",
+      "close_prompt": "El cierre cancelará todas las subidas, ¿estás seguro?",
+      "image_error": "Hubo un error al cargar la imagen",
+      "image_data_error": "o bien el tamaño de la imagen excede el límite o está dañada",
+      "corner_tooltip": "Arrastra la esquina para redimensionar",
+      "handle_tooltip": "Arrastra para redimensionar"
+    },
+    "uploader": {
+      "errors": {
+        "file_too_large": "El tamaño del archivo ({{size}}) excede el límite permitido ({{allowed}})",
+        "max_dimensions_validation": "Las dimensiones de la imagen ({{width}}x{{height}}) exceden el límite permitido: ({{maxWidth}}x{{maxHeight}})",
+        "min_dimensions_validation": "Las dimensiones de la imagen ({{width}}x{{height}}) son menores que el límite permitido: ({{minWidth}}x{{minHeight}})",
+        "max_number_of_files": "Límite máximo de archivos excedido",
+        "allowed_formats": "Formato de archivo no permitido",
+        "max_file_size": "Tamaño de archivo excedido",
+        "min_file_size": "Tamaño de archivo insuficiente"
+      },
+      "close_mid_upload": "Hay subidas en progreso. Haz clic en 'OK' para cancelarlas"
+    },
+    "queue": {
+      "title": "Cola de subidas",
+      "title_uploading_with_counter": "Subiendo {{num}} archivos",
+      "title_processing_with_counter": "Procesando {{num}} archivos",
+      "title_uploading_processing_with_counter": "Subiendo {{uploading}} archivos, procesando {{processing}} archivos",
+      "title_uploading": "Subiendo archivos",
+      "mini_title": "Subido",
+      "mini_title_uploading": "Subiendo",
+      "mini_title_processing": "Procesando",
+      "show_completed": "Mostrar completados",
+      "retry_failed": "Reintentar fallidos",
+      "abort_all": "Cancelar todo",
+      "upload_more": "Subir más",
+      "done": "Listo",
+      "mini_upload_count": "{{num}} subido",
+      "mini_failed": "{{num}} fallidos",
+      "statuses": {
+        "uploading": "Subiendo...",
+        "processing": "Procesando...",
+        "timeout": "Se está subiendo un archivo grande. Puede que tarde un poco en aparecer en el entorno de tu producto.",
+        "error": "Error",
+        "uploaded": "Listo",
+        "aborted": "Cancelado"
+      }
+    },
+    "aria_label": {
+      "close": "Cerrar",
+      "back": "Regresar"
+    },
+    "landscape_overlay": {
+      "title": "El modo paisaje no está soportado",
+      "description": "Por favor, gira tu dispositivo a modo retrato para continuar."
+    },
+    "notifications": {
+      "general_error": "Ha ocurrido un error",
+      "general_prompt": "¿Estás seguro?",
+      "limit_reached": "No se pueden seleccionar más archivos.",
+      "invalid_add_url": "La URL no es válida.",
+      "invalid_public_id": "El ID público no puede contener \\,,&,#,%,<,>.",
+      "no_new_files": "Los archivos ya han sido subidos."
+    }
+  }
+}
