@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { CldImage } from 'next-cloudinary'
 import { useAuth } from '@/hooks/auth'
 import {
   Button,
@@ -10,7 +11,6 @@ import {
   DropdownMenu,
   DropdownToggle,
 } from 'react-bootstrap'
-import Image from 'next/image'
 
 const LoginLinks = () => {
   const { user, logout } = useAuth({ middleware: 'guest' })
@@ -25,13 +25,13 @@ const LoginLinks = () => {
               data-bs-toggle="dropdown"
               aria-expanded="false"
               className="link-body-emphasis text-decoration-none p-0">
-              <Image
-                // src={user.image_url || '/profile_avatar_placeholder.png'}
-                src="/profile_avatar_placeholder.png"
-                width={22}
-                height={22}
-                alt={`@${user.name}'s profile picture`}
-                className="user-image rounded-circle"
+              <CldImage
+                src={user?.avatar || 'users/placeholder'}
+                width="22"
+                height="22"
+                {...(user?.avatar && { preserveTransformations: true })}
+                alt={`@${user?.username}'s profile picture`}
+                className="rounded-circle"
               />
               <span className="ms-2">{user?.display_name}</span>
             </DropdownToggle>
