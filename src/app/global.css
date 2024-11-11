@@ -1,20 +1,44 @@
+/* Colores de fondo de Mercado Libre */
 .bg-primary-meli {
   background-color: #fee600;
 }
-
 .bg-body-meli {
   background-color: #ededed;
 }
-
 .bg-disabled-meli {
   background-color: #f5f5f5;
 }
+.bg-button-primary-meli {
+  background-color: #3483fa;
+}
+.bg-button-secondary-meli {
+  background-color: #e4edfc;
+}
+.bg-button-secondary-meli:hover {
+  background-color: #dae7ff;
+}
 
+/* Estilos para el inicio */
 .carousel-image {
   width: 100%;
   height: auto;
 }
 
+/* Estilos para la sidebar de Perfil */
 .sidebar-container {
   height: calc(100vh - 56px); /* 56px la altura del header */
+}
+
+/* Estilos para el botón de seleccionar fotos */
+.upload-button {
+  background-color: var(--bs-body-bg);
+}
+.upload-button:hover {
+  background-color: var(
+    --bs-primary-bg-subtle
+  ); /* Cambiar el color de fondo al hacer hover */
+}
+
+.modal-90w {
+  width: 90%;
 }
