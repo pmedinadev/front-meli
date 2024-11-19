@@ -47,6 +47,16 @@ const LoginLinks = () => {
               </li>
             </DropdownMenu>
           </Dropdown>
+          <small className="">
+            <Link
+              href="/"
+              className="link-body-emphasis text-decoration-none mx-3">
+              Mis compras
+            </Link>
+            <Link href="/" className="link-body-emphasis text-decoration-none">
+              Favoritos
+            </Link>
+          </small>
           <Button
             variant="link"
             size="lg"
@@ -57,7 +67,7 @@ const LoginLinks = () => {
           </Button>
         </>
       ) : (
-        <>
+        <small className="text-end ms-auto">
           <Link
             href="/register"
             className="link-body-emphasis text-decoration-none me-3">
@@ -69,7 +79,7 @@ const LoginLinks = () => {
             className="link-body-emphasis text-decoration-none">
             Ingresa
           </Link>
-        </>
+        </small>
       )}
     </>
   )
