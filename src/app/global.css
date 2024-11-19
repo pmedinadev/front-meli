@@ -24,6 +24,26 @@
   height: auto;
 }
 
+/* Remover el botón para cancelar búsqueda de input search */
+[type='search']::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.hover-bg-primary:hover {
+  background-color: #3483fa;
+  color: white;
+  cursor: pointer;
+}
+
+/* Agregar borde al hacer hover en Código Postal */
+.zipcode-button {
+  border: 1px solid transparent;
+}
+.zipcode-button:hover {
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  cursor: pointer;
+}
+
 /* Estilos para la sidebar de Perfil */
 .sidebar-container {
   height: calc(100vh - 56px); /* 56px la altura del header */

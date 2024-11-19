@@ -3,6 +3,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Col, Container, Navbar, NavbarBrand, Row } from 'react-bootstrap'
 
+export const metadata = {
+  title: 'Página no encontrada',
+}
+
 const NotFoundPage = () => {
   return (
     <div className="bg-white d-flex flex-column min-vh-100">
@@ -24,9 +28,7 @@ const NotFoundPage = () => {
         <Row className="w-100 text-center">
           <Col>
             <NotFound />
-            <h5 className="fw-bold my-4">
-              Parece que esta página no existe
-            </h5>
+            <h5 className="fw-bold my-4">Parece que esta página no existe</h5>
             <Link
               href="/"
               className="link-secondary link-underline link-underline-opacity-0 link-underline-opacity-100-hover">

@@ -15,28 +15,31 @@ const CONDITIONS = {
   reaconditioned: 'Reacondicionado',
 }
 
-export default function ProductDetail() {
+export default function ProductDetail({ initialProduct }) {
   const { MLPid } = useParams()
   const { getProduct } = useProducts()
-  const [product, setProduct] = useState(null)
+  const [product, setProduct] = useState(initialProduct)
   const [selectedPhoto, setSelectedPhoto] = useState(0)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!initialProduct)
 
   useEffect(() => {
     const loadProduct = async () => {
-      try {
-        const productId = MLPid.replace('MLP', '')
-        const productData = await getProduct(productId)
-        setProduct(productData)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setLoading(false)
+      if (!initialProduct) {
+        setLoading(true)
+        try {
+          const productId = MLPid.replace('MLP', '')
+          const productData = await getProduct(productId)
+          setProduct(productData)
+        } catch (error) {
+          console.error(error)
+        } finally {
+          setLoading(false)
+        }
       }
     }
 
     loadProduct()
-  }, [MLPid])
+  }, [MLPid, initialProduct, getProduct])
 
   const formatPrice = price => {
     const [whole, decimal] = parseFloat(price).toFixed(2).split('.')
@@ -98,7 +101,7 @@ export default function ProductDetail() {
             {/* Descripción */}
             <div className="border-top border-bottom px-3 py-5">
               <h5 className="fw-normal">Descripción</h5>
-              <p className="mb-0 text-muted">
+              <p style={{ whiteSpace: 'pre-line' }} className="mb-0 text-muted">
                 {product.description || 'Sin descripción'}
               </p>
             </div>
