@@ -18,6 +18,12 @@ export const INFO_CARDS = [
   },
 ]
 
+export const CONDITIONS = {
+  new: 'Nuevo',
+  used: 'Usado',
+  reaconditioned: 'Reacondicionado',
+}
+
 export const CONDITION_OPTIONS = [
   { value: 'new', label: 'Nuevo' },
   { value: 'used', label: 'Usado' },
