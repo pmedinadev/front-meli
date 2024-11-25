@@ -8,6 +8,11 @@ async function getProduct(id) {
       { cache: 'no-store' },
     )
     const data = await response.json()
+
+    if (data.product?.status !== 'published') {
+      return null
+    }
+
     return data.product
   } catch (error) {
     console.error('Error fetching product:', error)
@@ -27,7 +32,8 @@ export async function generateMetadata({ params }) {
 
   if (!product) {
     return {
-      title: 'Producto no encontrado',
+      title: 'Producto no disponible',
+      description: 'Este producto no está disponible actualmente',
     }
   }
 

@@ -30,7 +30,7 @@ const LoginLinks = () => {
                 width="22"
                 height="22"
                 {...(user?.avatar && { preserveTransformations: true })}
-                alt={`@${user?.username}'s profile picture`}
+                alt={`Avatar de @${user?.username}`}
                 className="rounded-circle"
               />
               <span className="ms-2">{user?.display_name}</span>

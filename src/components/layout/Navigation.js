@@ -1,6 +1,8 @@
 'use client'
 
 import LoginLinks from '@/app/LoginLinks'
+import { useAuth } from '@/hooks/auth'
+import { useCart } from '@/hooks/useCart'
 import { useCategories } from '@/hooks/useCategories'
 import { useSearch } from '@/hooks/useSearch'
 import Image from 'next/image'
@@ -25,9 +27,11 @@ import {
 } from 'react-bootstrap'
 
 export default function Navigation() {
+  const { user } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const { categories, loading, error } = useCategories()
+  const { getCartProducts } = useCart()
   const {
     searchTerm,
     setSearchTerm,
@@ -37,6 +41,16 @@ export default function Navigation() {
     addToSearchHistory,
   } = useSearch()
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
+
+  const fetchCartCount = async () => {
+    if (user?.cart_id) {
+      const cartItems = await getCartProducts(user.cart_id)
+      const totalUnits =
+        cartItems?.reduce((sum, item) => sum + item.quantity, 0) || 0
+      setCartCount(totalUnits)
+    }
+  }
 
   useEffect(() => {
     if (!pathname.startsWith('/search')) {
@@ -44,6 +58,16 @@ export default function Navigation() {
       setShowSuggestions(false)
     }
   }, [pathname])
+
+  useEffect(() => {
+    fetchCartCount()
+
+    window.addEventListener('cartUpdate', fetchCartCount)
+
+    return () => {
+      window.removeEventListener('cartUpdate', fetchCartCount)
+    }
+  }, [user])
 
   return (
     <Navbar expand="lg" className="bg-primary-meli">
@@ -56,7 +80,7 @@ export default function Navigation() {
                   src="/logo_large.png"
                   width={159}
                   height={40}
-                  alt="Mercado Libre logo"
+                  alt="Mercado Libre México - Donde comprar y vender de todo"
                   priority
                 />
               </NavbarBrand>
@@ -67,6 +91,7 @@ export default function Navigation() {
               <form onSubmit={handleSearch}>
                 <FormControl
                   type="search"
+                  name="q"
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   onFocus={() => setShowSuggestions(true)}
@@ -120,7 +145,12 @@ export default function Navigation() {
           </Col>
           <Col xs="4">
             <div className="text-end ms-auto">
-              <Image src="/meli_plus_header.webp" width={340} height={39} />
+              <Image
+                src="/meli_plus_header.webp"
+                width={340}
+                height={39}
+                alt="SUSCRÍBETE A MELI+ TOTAL POR 65 PESOS"
+              />
             </div>
           </Col>
         </Row>
@@ -180,15 +210,24 @@ export default function Navigation() {
           </Col>
           <Col xs="4" className="d-flex align-items-center">
             <LoginLinks />
-            <Button
-              variant="link"
-              size="lg"
-              as={Link}
-              title="Carrito"
-              href="/cart"
-              className="link-body-emphasis ms-3 p-0">
-              <i className="bi bi-cart" />
-            </Button>
+            <div className="position-relative">
+              <Button
+                variant="link"
+                size="lg"
+                as={Link}
+                title="Carrito"
+                href="/cart"
+                className="link-body-emphasis ms-3 p-0">
+                <i className="bi bi-cart" />
+                {cartCount > 0 && (
+                  <span
+                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    style={{ fontSize: '0.65rem' }}>
+                    {cartCount > 9 ? '+9' : cartCount}
+                  </span>
+                )}
+              </Button>
+            </div>
           </Col>
         </Row>
       </Container>

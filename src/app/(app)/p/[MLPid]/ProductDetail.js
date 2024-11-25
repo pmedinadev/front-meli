@@ -2,26 +2,55 @@
 
 import CardContainer from '@/components/layout/CardContainer'
 import LoadingSpinner from '@/components/layout/LoadingSpinner'
+import { useAuth } from '@/hooks/auth'
+import { useCart } from '@/hooks/useCart'
 import { useProducts } from '@/hooks/useProducts'
-import { CldImage } from 'next-cloudinary'
-import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Button, Col, Container, Row } from 'react-bootstrap'
-
-const CONDITIONS = {
-  new: 'Nuevo',
-  used: 'Usado',
-  reaconditioned: 'Reacondicionado',
-}
+import { Col, Container, Row } from 'react-bootstrap'
+import ProductImages from './components/ProductImages'
+import ProductSidebar from './components/ProductSidebar'
+import SellerInfo from './components/SellerInfo'
+import SuccessOffcanvas from './components/SuccessOffcanvas'
+import Link from 'next/link'
 
 export default function ProductDetail({ initialProduct }) {
+  // Hooks
+  const { user } = useAuth()
+  const { getCartProducts, addToCart, loading: addingToCart } = useCart()
   const { MLPid } = useParams()
   const { getProduct } = useProducts()
-  const [product, setProduct] = useState(initialProduct)
-  const [selectedPhoto, setSelectedPhoto] = useState(0)
-  const [loading, setLoading] = useState(!initialProduct)
 
+  // Estados
+  const [product, setProduct] = useState(initialProduct)
+  const [loading, setLoading] = useState(!initialProduct)
+  const [loadingCartQuantity, setLoadingCartQuantity] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [quantity, setQuantity] = useState(1)
+  const [selectedPhoto, setSelectedPhoto] = useState(0)
+  const [showOffcanvas, setShowOffcanvas] = useState(false)
+  const [addedToCartQuantity, setAddedToCartQuantity] = useState(0)
+
+  // Controladores de eventos
+  const handleCloseOffcanvas = () => setShowOffcanvas(false)
+  const handleShowOffcanvas = () => setShowOffcanvas(true)
+
+  const handleAddToCart = async () => {
+    setErrorMessage(null)
+    try {
+      await addToCart(user.cart_id, product.id, quantity)
+      setAddedToCartQuantity(quantity)
+      handleShowOffcanvas()
+      await loadCartQuantity()
+      setQuantity(1)
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.error || 'Error al agregar al carrito',
+      )
+    }
+  }
+
+  // Efectos
   useEffect(() => {
     const loadProduct = async () => {
       if (!initialProduct) {
@@ -41,62 +70,51 @@ export default function ProductDetail({ initialProduct }) {
     loadProduct()
   }, [MLPid, initialProduct, getProduct])
 
-  const formatPrice = price => {
-    const [whole, decimal] = parseFloat(price).toFixed(2).split('.')
-    const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    return { whole: formattedWhole, decimal: decimal === '00' ? null : decimal }
+  const loadCartQuantity = async () => {
+    if (user?.cart_id && product?.id) {
+      setLoadingCartQuantity(true)
+      try {
+        await getCartProducts(user.cart_id)
+      } catch (error) {
+        console.error('Error loading cart quantity:', error)
+      } finally {
+        setLoadingCartQuantity(false)
+      }
+    }
   }
 
+  useEffect(() => {
+    loadCartQuantity()
+  }, [user, product])
+
+  // Protectores de renderizado
   if (loading) return <LoadingSpinner />
   if (!product) return null
 
   return (
-    <Container className="my-5">
+    <Container className="my-4">
+      <div className="mb-3 d-flex gap-3">
+        <small>
+          <Link href="/" className="text-decoration-none">
+            Volver al inicio
+          </Link>
+          <span className="text-muted mx-2">|</span>
+          <Link
+            href={`/category/${product.category?.id}`}
+            className="text-decoration-none">
+            {product.category?.name}
+          </Link>
+        </small>
+      </div>
       <CardContainer className="bg-body">
         <Row className="g-0">
           <Col className="col-8 p-4">
-            {/* Imágenes */}
-            <Row className="g-0 mb-4">
-              <Col className="col-auto">
-                <div className="d-flex flex-column gap-2">
-                  {product.photos.map((photo, index) => (
-                    <div
-                      key={photo.id}
-                      className={`border rounded p-1 cursor-pointer ${
-                        selectedPhoto === index ? 'border-primary' : ''
-                      }`}
-                      onMouseEnter={() => setSelectedPhoto(index)}
-                      role="button">
-                      <CldImage
-                        src={photo.public_id}
-                        width={50}
-                        height={50}
-                        crop="fill"
-                        alt={`${product.title} thumbnail ${index + 1}`}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </Col>
-              <Col className="d-flex justify-content-center">
-                {product.photos.length > 0 ? (
-                  <CldImage
-                    src={product.photos[selectedPhoto].public_id}
-                    width={500}
-                    height={500}
-                    crop="fill"
-                    alt={product.title}
-                  />
-                ) : (
-                  <Image
-                    src="/profile_avatar_placeholder.png"
-                    width={500}
-                    height={500}
-                    alt={product.title}
-                  />
-                )}
-              </Col>
-            </Row>
+            <ProductImages
+              photos={product.photos}
+              title={product.title}
+              selectedPhoto={selectedPhoto}
+              onPhotoSelect={setSelectedPhoto}
+            />
 
             {/* Descripción */}
             <div className="border-top border-bottom px-3 py-5">
@@ -107,73 +125,42 @@ export default function ProductDetail({ initialProduct }) {
             </div>
           </Col>
 
-          {/* Barra lateral */}
           <Col className="col-4 p-4">
             {/* Detalles del producto */}
-            <div className="border rounded p-3 mb-3">
-              <p className="text-muted mb-2">
-                <small>
-                  {CONDITIONS[product.condition] || product.condition}
-                </small>
-              </p>
-              <h5 className="fw-bold">{product.title}</h5>
-              <h2 className="fw-light">
-                $ {formatPrice(product.price).whole}
-                {formatPrice(product.price).decimal && (
-                  <sup className="fs-6 ms-1">
-                    {formatPrice(product.price).decimal}
-                  </sup>
-                )}
-              </h2>
-              <p className="fw-medium">
-                {product.stock > 0
-                  ? `Stock disponible (${product.stock} unidades)`
-                  : 'Sin stock'}
-              </p>
-              <Button className="bg-button-primary-meli w-100 fw-medium py-2 mb-2">
-                Comprar ahora
-              </Button>
-              <Button className="bg-button-secondary-meli text-primary w-100 fw-medium border-0 py-2">
-                Agregar al carrito
-              </Button>
-            </div>
+            <ProductSidebar
+              product={product}
+              quantity={quantity}
+              onQuantityChange={setQuantity}
+              onAddToCart={handleAddToCart}
+              loading={addingToCart}
+              loadingCart={loadingCartQuantity}
+              errorMessage={errorMessage}
+            />
 
             {/* Detalles del vendedor */}
-            <div className="border rounded p-3">
-              <Row className="g-0 align-items-center mb-2">
-                <Col className="col-auto me-3">
-                  <CldImage
-                    src={product.user?.avatar || 'users/placeholder'}
-                    width="50"
-                    height="50"
-                    {...(product.user?.avatar && {
-                      preserveTransformations: true,
-                    })}
-                    alt={`@${product.user?.username}'s profile picture`}
-                    className="rounded-circle border border-tertiary"
-                  />
-                </Col>
-                <Col>
-                  <h5 className="mb-0">
-                    {product.user?.display_name || `@${product.user?.username}`}
-                  </h5>
-                </Col>
-              </Row>
-              <small className="text-muted">
-                <p className="mb-2">Vendedor de Mercado Libre</p>
-                <div className="d-flex gap-3">
-                  <p className="mb-0">
-                    <strong>50</strong> productos
-                  </p>
-                  <p className="mb-0">
-                    <strong>10</strong> ventas
-                  </p>
-                </div>
-              </small>
-            </div>
+            <SellerInfo user={product.user} />
           </Col>
         </Row>
       </CardContainer>
+      <div className="text-end mt-3">
+        <small>
+          <span>
+            Publicación <strong>#{MLPid.replace('MLP', '')}</strong>
+          </span>
+          <span className="mx-2">|</span>
+          <span>
+            <Link href="" className="text-decoration-none">
+              Reportar
+            </Link>
+          </span>
+        </small>
+      </div>
+      <SuccessOffcanvas
+        show={showOffcanvas}
+        onHide={handleCloseOffcanvas}
+        product={product}
+        quantity={addedToCartQuantity}
+      />
     </Container>
   )
 }
