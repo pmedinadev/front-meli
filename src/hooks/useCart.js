@@ -2,11 +2,12 @@ import axios from '@/lib/axios'
 import { useState } from 'react'
 
 export const useCart = () => {
+  const [addingToCart, setAddingToCart] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
   const addToCart = async (cartId, productId, quantity) => {
-    setLoading(true)
+    setAddingToCart(true)
     setError(null)
     try {
       const response = await axios.post('/api/cartproducts', {
@@ -20,7 +21,7 @@ export const useCart = () => {
       setError(error.response?.data?.error || error.message)
       throw error
     } finally {
-      setLoading(false)
+      setAddingToCart(false)
     }
   }
 
@@ -75,6 +76,7 @@ export const useCart = () => {
     getCartProducts,
     updateQuantity,
     removeFromCart,
+    addingToCart,
     loading,
     error,
   }

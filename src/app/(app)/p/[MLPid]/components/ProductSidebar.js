@@ -15,7 +15,6 @@ export default function ProductSidebar({
   onQuantityChange,
   onAddToCart,
   loading,
-  loadingCart,
   errorMessage,
 }) {
   return (
@@ -47,16 +46,12 @@ export default function ProductSidebar({
             className="fw-medium border-0"
             value={quantity}
             onChange={e => onQuantityChange(parseInt(e.target.value))}
-            disabled={loadingCart}>
-            {loadingCart ? (
-              <option>Cargando...</option>
-            ) : (
-              [...Array(6)].map((_, index) => (
-                <option key={index + 1} value={index + 1}>
-                  {index + 1} unidad{index + 1 > 1 ? 'es' : ''}
-                </option>
-              ))
-            )}
+            disabled={loading}>
+            {[...Array(6)].map((_, index) => (
+              <option key={index + 1} value={index + 1}>
+                {index + 1} unidad{index + 1 > 1 ? 'es' : ''}
+              </option>
+            ))}
           </FormSelect>
         </Col>
       </Row>
@@ -66,9 +61,9 @@ export default function ProductSidebar({
       <Button
         variant="light"
         onClick={onAddToCart}
-        disabled={loading || loadingCart}
+        disabled={loading}
         className="bg-button-secondary-meli text-primary w-100 fw-medium border-0 py-2">
-        {loading || loadingCart ? (
+        {loading ? (
           <Spinner
             as="span"
             animation="border"
