@@ -5,7 +5,7 @@ import LoadingSpinner from '@/components/layout/LoadingSpinner'
 import { useAuth } from '@/hooks/auth'
 import { useCart } from '@/hooks/useCart'
 import { useProducts } from '@/hooks/useProducts'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import ProductImages from './components/ProductImages'
@@ -17,14 +17,14 @@ import Link from 'next/link'
 export default function ProductDetail({ initialProduct }) {
   // Hooks
   const { user } = useAuth()
-  const { getCartProducts, addToCart, loading: addingToCart } = useCart()
+  const { getCartProducts, addToCart, addingToCart } = useCart()
   const { MLPid } = useParams()
   const { getProduct } = useProducts()
+  const router = useRouter()
 
   // Estados
   const [product, setProduct] = useState(initialProduct)
   const [loading, setLoading] = useState(!initialProduct)
-  const [loadingCartQuantity, setLoadingCartQuantity] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [quantity, setQuantity] = useState(1)
   const [selectedPhoto, setSelectedPhoto] = useState(0)
@@ -36,6 +36,11 @@ export default function ProductDetail({ initialProduct }) {
   const handleShowOffcanvas = () => setShowOffcanvas(true)
 
   const handleAddToCart = async () => {
+    if (!user) {
+      router.push('/login')
+      return
+    }
+
     setErrorMessage(null)
     try {
       await addToCart(user.cart_id, product.id, quantity)
@@ -71,14 +76,12 @@ export default function ProductDetail({ initialProduct }) {
   }, [MLPid, initialProduct, getProduct])
 
   const loadCartQuantity = async () => {
+    if (!user) return
     if (user?.cart_id && product?.id) {
-      setLoadingCartQuantity(true)
       try {
         await getCartProducts(user.cart_id)
       } catch (error) {
         console.error('Error loading cart quantity:', error)
-      } finally {
-        setLoadingCartQuantity(false)
       }
     }
   }
@@ -133,7 +136,6 @@ export default function ProductDetail({ initialProduct }) {
               onQuantityChange={setQuantity}
               onAddToCart={handleAddToCart}
               loading={addingToCart}
-              loadingCart={loadingCartQuantity}
               errorMessage={errorMessage}
             />
 

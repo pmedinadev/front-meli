@@ -9,15 +9,22 @@ import {
   Spinner,
 } from 'react-bootstrap'
 
+const MAX_QUANTITY = 6
+
 export default function ProductSidebar({
   product,
   quantity,
   onQuantityChange,
   onAddToCart,
   loading,
-  loadingCart,
   errorMessage,
 }) {
+  const maxSelectableQuantity = Math.min(
+    product.stock - (product.cart_quantity || 0),
+    MAX_QUANTITY,
+  )
+  const isSingleUnit = product.stock === 1
+
   return (
     <div className="border rounded p-3 mb-3">
       <p className="text-muted mb-2">
@@ -30,45 +37,53 @@ export default function ProductSidebar({
           <sup className="fs-6 ms-1">{formatPrice(product.price).decimal}</sup>
         )}
       </h2>
-      <div className="my-2">
-        <span className="fw-medium me-2">Stock disponile</span>
-        <span className="text-muted">
-          <small>
-            {product.stock > 0 ? `(${product.stock} disponibles)` : 'Sin stock'}
-          </small>
-        </span>
+      <div className="my-3">
+        {isSingleUnit ? (
+          <span className="fw-bold">¡Última disponible!</span>
+        ) : (
+          <>
+            <span className="fw-medium me-2">Stock disponile</span>
+            <span className="text-muted">
+              <small>
+                {product.stock > 0
+                  ? `(${product.stock} disponibles)`
+                  : 'Sin stock'}
+              </small>
+            </span>
+          </>
+        )}
       </div>
-      <Row className="g-0 align-items-center mb-3">
-        <FormLabel column className="col-auto me-2">
-          Cantidad:
-        </FormLabel>
-        <Col>
-          <FormSelect
-            className="fw-medium border-0"
-            value={quantity}
-            onChange={e => onQuantityChange(parseInt(e.target.value))}
-            disabled={loadingCart}>
-            {loadingCart ? (
-              <option>Cargando...</option>
-            ) : (
-              [...Array(6)].map((_, index) => (
+
+      {!isSingleUnit && (
+        <Row className="g-0 align-items-center mb-3">
+          <FormLabel column className="col-auto me-2">
+            Cantidad:
+          </FormLabel>
+          <Col>
+            <FormSelect
+              className="fw-medium border-0"
+              value={quantity}
+              onChange={e => onQuantityChange(parseInt(e.target.value))}
+              disabled={loading}>
+              {[...Array(maxSelectableQuantity)].map((_, index) => (
                 <option key={index + 1} value={index + 1}>
                   {index + 1} unidad{index + 1 > 1 ? 'es' : ''}
                 </option>
-              ))
-            )}
-          </FormSelect>
-        </Col>
-      </Row>
+              ))}
+            </FormSelect>
+          </Col>
+        </Row>
+      )}
+
       <Button className="bg-button-primary-meli w-100 fw-medium py-2 mb-2">
         Comprar ahora
       </Button>
       <Button
         variant="light"
-        onClick={onAddToCart}
-        disabled={loading || loadingCart}
+        onClick={() => onAddToCart()}
+        disabled={loading}
         className="bg-button-secondary-meli text-primary w-100 fw-medium border-0 py-2">
-        {loading || loadingCart ? (
+        {loading ? (
           <Spinner
             as="span"
             animation="border"

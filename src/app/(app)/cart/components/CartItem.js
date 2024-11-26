@@ -103,13 +103,20 @@ export default function CartItem({
               quantity={product.quantity}
               onUpdate={handleQuantityUpdate}
               isUpdating={isUpdating}
+              stock={product.stock}
             />
 
             {/* Stock disponible */}
             <div className="text-center text-muted">
-              <span>
-                <small>{product.stock} disponibles</small>
-              </span>
+              {product.stock === 1 ? (
+                <span>
+                  <small>¡Última disponible!</small>
+                </span>
+              ) : (
+                <span>
+                  <small>{product.stock} disponibles</small>
+                </span>
+              )}
             </div>
           </Col>
 
@@ -118,7 +125,7 @@ export default function CartItem({
             <span className="mb-0 fs-5">
               $ {formattedPrice.whole}
               {formattedPrice.decimal && (
-                <sup className="fs-6 ms-1">{formattedPrice.decimal}</sup>
+                <sup style={{ fontSize: '12px' }}>{formattedPrice.decimal}</sup>
               )}
             </span>
           </Col>

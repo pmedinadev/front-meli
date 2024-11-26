@@ -220,6 +220,20 @@ export default function Cart() {
                               getSelectedItemsTotal(cartItems, selectedSellers),
                             ).whole
                           }
+                          {formatPrice(
+                            getSelectedItemsTotal(cartItems, selectedSellers),
+                          ).decimal && (
+                            <sup style={{ fontSize: '10px' }}>
+                              {
+                                formatPrice(
+                                  getSelectedItemsTotal(
+                                    cartItems,
+                                    selectedSellers,
+                                  ),
+                                ).decimal
+                              }
+                            </sup>
+                          )}
                         </small>
                       </span>
                     </div>
@@ -233,6 +247,17 @@ export default function Cart() {
                           getSelectedItemsTotal(cartItems, selectedSellers),
                         ).whole
                       }
+                      {formatPrice(
+                        getSelectedItemsTotal(cartItems, selectedSellers),
+                      ).decimal && (
+                        <sup style={{ fontSize: '10px' }}>
+                          {
+                            formatPrice(
+                              getSelectedItemsTotal(cartItems, selectedSellers),
+                            ).decimal
+                          }
+                        </sup>
+                      )}
                     </span>
                   </div>
                   <Button
