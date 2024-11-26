@@ -42,7 +42,7 @@ export default function ProductSidebar({
           <span className="fw-bold">¡Última disponible!</span>
         ) : (
           <>
-            <span className="fw-medium me-2">Stock disponile</span>
+            <span className="fw-medium me-2">Stock disponible</span>
             <span className="text-muted">
               <small>
                 {product.stock > 0

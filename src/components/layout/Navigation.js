@@ -99,6 +99,7 @@ export default function Navigation() {
                     setTimeout(() => setShowSuggestions(false), 200)
                   }
                   placeholder="Buscar productos, marcas y más…"
+                  autoComplete='false'
                   className="border-light rounded-1 shadow-sm pe-5"
                 />
                 <div className="vr position-absolute top-50 end-0 translate-middle-y me-5" />

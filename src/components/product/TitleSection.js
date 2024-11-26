@@ -27,11 +27,12 @@ export default function TitleSection({ title, onChange, onShowModal }) {
           value={title}
           onChange={onChange}
           placeholder="Ej: Samsung Galaxy S9 Dual Sim 32 GB ram azul"
+          maxLength={200}
           required
         />
         <div className="text-end">
           <FormText className="text-muted">
-            <small>{title.length} / 60</small>
+            <small>{title.length} / 200</small>
           </FormText>
         </div>
       </div>
