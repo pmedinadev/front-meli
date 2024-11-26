@@ -47,7 +47,7 @@ export default function ProductSidebar({
               <small>
                 {product.stock > 0
                   ? `(${product.stock} disponibles)`
-                  : 'Sin stock'}q
+                  : 'Sin stock'}
               </small>
             </span>
           </>
