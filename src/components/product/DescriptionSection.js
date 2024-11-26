@@ -27,6 +27,7 @@ export default function DescriptionSection({ description, onChange }) {
           placeholder="Escribe más información para tus compradores"
           rows={6}
           style={{ resize: 'none' }}
+          maxLength={50000}
           required
         />
         <div className="text-end">
