@@ -3,9 +3,11 @@ import { Button, Spinner } from 'react-bootstrap'
 
 const MAX_ITEMS_PER_PRODUCT = 6
 
-export default function QuantityControl({ quantity, onUpdate, isUpdating }) {
+export default function QuantityControl({ quantity, onUpdate, isUpdating, stock }) {
+  const maxQuantity = Math.min(stock, MAX_ITEMS_PER_PRODUCT)
+
   return (
-    <div className="border rounded d-flex align-items-center mb-2">
+    <div className="border rounded d-inline-flex align-items-center mb-2">
       {/* Botón para decrementar */}
       <Button
         variant="light"
@@ -29,7 +31,7 @@ export default function QuantityControl({ quantity, onUpdate, isUpdating }) {
         variant="light"
         className="rounded-0 rounded-end p-1"
         onClick={() => onUpdate(quantity + 1)}
-        disabled={isUpdating || quantity >= MAX_ITEMS_PER_PRODUCT}>
+        disabled={isUpdating || quantity >= maxQuantity}>
         <i className="bi bi-plus-lg px-1 text-primary" />
       </Button>
     </div>
@@ -40,4 +42,5 @@ QuantityControl.propTypes = {
   quantity: PropTypes.number.isRequired,
   onUpdate: PropTypes.func.isRequired,
   isUpdating: PropTypes.bool.isRequired,
+  stock: PropTypes.number.isRequired,
 }
