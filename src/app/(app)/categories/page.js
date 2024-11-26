@@ -1,17 +1,18 @@
 'use client'
+
 import { useCategories } from '@/hooks/useCategories'
 import CardContainer from "@/components/layout/CardContainer"
 import {
   DropdownItem,
-  Link,
   Spinner,
 } from 'react-bootstrap'
+import Link from 'next/link'
 
 export default function CategoriesPage() {
   const { categories, loading, error } = useCategories()
 
-  if (loading) return <Spinner animation="border" role="status" />;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <Spinner animation="border" role="status" />
+  if (error) return <p>Error: {error.message}</p>
   return (
     <div className="mt-5 m-5">
       <h5 className="m-5">Categorías para comprar y vender</h5>
