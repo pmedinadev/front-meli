@@ -15,8 +15,9 @@ import { useEffect, useState } from 'react'
 // Importación de formateador de precios
 import { formatPrice } from '@/utils/formatters'
 
-// Constante para almacenar la clave de localStorage
+// Constantes para almacenar la clave de localStorage
 const LOCAL_STORAGE_SELECTED_SELLERS = 'selected-sellers'
+const LOCAL_STORAGE_FIRST_SELLER = 'first-seller-id'
 
 export default function Cart() {
   // Inicializar hooks
@@ -29,12 +30,15 @@ export default function Cart() {
 
   // Inicializar vendedores seleccionados desde localStorage
   const [selectedSellers, setSelectedSellers] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return JSON.parse(
-        localStorage.getItem(LOCAL_STORAGE_SELECTED_SELLERS) || '[]',
-      )
-    }
-    return []
+    if (typeof window === 'undefined') return []
+    const stored = localStorage.getItem(LOCAL_STORAGE_SELECTED_SELLERS)
+    return stored ? JSON.parse(stored) : []
+  })
+
+  // Inicializar el primer vendedor desde localStorage
+  const [firstSeller, setFirstSeller] = useState(() => {
+    if (typeof window === 'undefined') return null
+    return localStorage.getItem(LOCAL_STORAGE_FIRST_SELLER)
   })
 
   // Calcular la cantidad total de productos seleccionados
@@ -49,6 +53,27 @@ export default function Cart() {
     return items
       .filter(item => selectedIds.includes(item.user_id))
       .reduce((sum, item) => sum + item.price * item.quantity, 0)
+  }
+
+  // Agrupar productos por vendedor
+  const groupItemsBySeller = products => {
+    return [...products]
+      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+      .reduce((groups, product) => {
+        const sellerId = product.user_id
+
+        // Si el grupo no existe, crear nuevo grupo
+        if (!groups[sellerId]) {
+          groups[sellerId] = {
+            seller: product.user,
+            products: [],
+            firstAdded: product.created_at,
+          }
+        }
+
+        groups[sellerId].products.push(product)
+        return groups
+      }, [])
   }
 
   // Actualizar la cantidad de un producto en el carrito
@@ -82,26 +107,13 @@ export default function Cart() {
 
   // Manejar el cambio de selección de vendedor
   const handleSellerSelection = sellerId => {
-    setSelectedSellers(prev =>
-      prev.includes(sellerId)
+    setSelectedSellers(prev => {
+      const newSelection = prev.includes(sellerId)
         ? prev.filter(id => id !== sellerId)
-        : [...prev, sellerId],
-    )
-  }
+        : [...prev, sellerId]
 
-  // Agrupar productos por vendedor
-  const groupItemsBySeller = products => {
-    return products.reduce((groups, product) => {
-      const sellerId = product.user_id
-      if (!groups[sellerId]) {
-        groups[sellerId] = {
-          seller: product.user,
-          products: [],
-        }
-      }
-      groups[sellerId].products.push(product)
-      return groups
-    }, {})
+      return newSelection
+    })
   }
 
   // Cargar productos del carrito al iniciar
@@ -116,6 +128,26 @@ export default function Cart() {
     loadUserCartItems()
   }, [user])
 
+  // Actualizar el primer vendedor y los vendedores seleccionados en localStorage
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      setFirstSeller(null)
+      localStorage.removeItem(LOCAL_STORAGE_FIRST_SELLER)
+      return
+    }
+
+    if (!firstSeller && cartItems.length > 0) {
+      const initialSellerId = cartItems[0].user_id
+      setFirstSeller(initialSellerId)
+      localStorage.setItem(LOCAL_STORAGE_FIRST_SELLER, initialSellerId)
+
+      // Only add first seller if no selections exist
+      if (selectedSellers.length === 0) {
+        setSelectedSellers([initialSellerId])
+      }
+    }
+  }, [cartItems, firstSeller])
+
   // Guardar vendedores seleccionados en localStorage
   useEffect(() => {
     localStorage.setItem(
@@ -127,15 +159,29 @@ export default function Cart() {
   // Protección de renderizado
   if (!user || loading) return <LoadingSpinner />
 
+  const groupedItems = groupItemsBySeller(cartItems)
+
+  console.log(
+    'Received cartItems:',
+    cartItems.map(item => ({
+      id: item.id,
+      user_id: item.user_id,
+      created_at: item.created_at,
+    })),
+  )
+
   return (
     <Container className="my-5">
       <Row as="section" className="g-4">
         {/* Columna para mostrar los productos del carrito */}
         <Col as="article">
           {cartItems.length > 0 ? (
-            // Agrupar productos por vendedor y mostrarlos
-            Object.values(groupItemsBySeller(cartItems)).map(
-              ({ seller, products }) => (
+            Object.entries(groupedItems)
+              .sort(
+                ([, a], [, b]) =>
+                  new Date(a.firstAdded) - new Date(b.firstAdded),
+              )
+              .map(([, { seller, products }]) => (
                 <section key={seller.id} className="mb-3">
                   <CardContainer className="bg-body">
                     {/* Encabezado del vendedor */}
@@ -165,8 +211,7 @@ export default function Cart() {
                     ))}
                   </CardContainer>
                 </section>
-              ),
-            )
+              ))
           ) : (
             // Vista para cuando no hay productos en el carrito
             <CardContainer className="bg-disabled-meli p-3 h-100 d-flex align-items-center justify-content-center">
