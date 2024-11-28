@@ -62,3 +62,14 @@
 .modal-90w {
   width: 90%;
 }
+
+/* Estilos para CategoryDetail */
+.category-detail-product-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.2em;
+  height: 2.4em;
+}
