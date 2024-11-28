@@ -96,14 +96,14 @@ export default function ProductDetail({ initialProduct }) {
 
   return (
     <Container className="my-4">
-      <div className="mb-3 d-flex gap-3">
+      <div className="mb-2 d-flex gap-3">
         <small>
           <Link href="/" className="text-decoration-none">
             Volver al inicio
           </Link>
           <span className="text-muted mx-2">|</span>
           <Link
-            href={`/category/${product.category?.id}`}
+            href={`/c/${product.category?.slug}`}
             className="text-decoration-none">
             {product.category?.name}
           </Link>

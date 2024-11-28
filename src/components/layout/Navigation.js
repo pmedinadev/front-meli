@@ -99,7 +99,8 @@ export default function Navigation() {
                     setTimeout(() => setShowSuggestions(false), 200)
                   }
                   placeholder="Buscar productos, marcas y más…"
-                  autoComplete='false'
+                  maxLength={120}
+                  autoComplete="false"
                   className="border-light rounded-1 shadow-sm pe-5"
                 />
                 <div className="vr position-absolute top-50 end-0 translate-middle-y me-5" />
@@ -120,7 +121,7 @@ export default function Navigation() {
                           <Link
                             key={product.id}
                             href={`/p/MLP${product.id}`}
-                            className="d-block py-2 px-3 text-decoration-none text-black hover-bg-primary">
+                            className="d-block py-2 px-3 text-decoration-none text-black hover-bg-primary text-truncate">
                             <i className="bi bi-search me-3 opacity-50" />
                             {product.title}
                           </Link>
@@ -128,7 +129,7 @@ export default function Navigation() {
                       : getSearchHistory().map((term, index) => (
                           <div
                             key={index}
-                            className="py-2 px-3 hover-bg-primary"
+                            className="py-2 px-3 hover-bg-primary d-flex"
                             onClick={() => {
                               setSearchTerm(term)
                               addToSearchHistory(term)
@@ -137,7 +138,9 @@ export default function Navigation() {
                               )
                             }}>
                             <i className="bi bi-clock me-3 opacity-50" />
-                            <span className="user-select-none">{term}</span>
+                            <span className="user-select-none d-block text-truncate">
+                              {term}
+                            </span>
                           </div>
                         ))}
                   </div>
@@ -190,7 +193,7 @@ export default function Navigation() {
                         <DropdownItem
                           key={category.id}
                           as={Link}
-                          href={`/category/${category.id}`}>
+                          href={`/c/${category.slug}`}>
                           {category.name}
                         </DropdownItem>
                       ))}
