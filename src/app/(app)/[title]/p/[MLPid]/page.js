@@ -1,5 +1,5 @@
-import { notFound } from 'next/navigation'
 import ProductDetail from './ProductDetail'
+import { notFound } from 'next/navigation'
 
 async function getProduct(id) {
   try {

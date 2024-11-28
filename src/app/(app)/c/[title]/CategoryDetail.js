@@ -60,7 +60,7 @@ export default function CategoryDetail() {
                     </span>
                   </small>
                   <Link
-                    href={`/p/MLP${product.id}`}
+                    href={product.href}
                     className="stretched-link"
                   />
                 </CardBody>

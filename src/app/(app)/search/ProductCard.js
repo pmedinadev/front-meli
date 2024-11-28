@@ -3,25 +3,15 @@
 import Link from 'next/link'
 import { Col, Row } from 'react-bootstrap'
 import { CldImage } from 'next-cloudinary'
-
-const CONDITIONS = {
-  new: 'Nuevo',
-  used: 'Usado',
-  reaconditioned: 'Reacondicionado',
-}
-
-const formatPrice = price => {
-  const [whole, decimal] = parseFloat(price).toFixed(2).split('.')
-  const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  return { whole: formattedWhole, decimal: decimal === '00' ? null : decimal }
-}
+import { formatPrice } from '@/utils/formatters'
+import { CONDITIONS } from '@/constants/product'
 
 export default function ProductCard({ product }) {
   const formattedPrice = formatPrice(product.price)
 
   return (
     <>
-      <Link href={`/p/MLP${product.id}`} className="text-decoration-none">
+      <Link href={product.href} className="text-decoration-none">
         <Row className="g-0">
           <Col className="col-auto p-3">
             {product.photos && product.photos.length > 0 ? (
@@ -45,9 +35,7 @@ export default function ProductCard({ product }) {
             <h4 className="text-dark fw-normal mb-1">
               $ {formattedPrice.whole}
               {formattedPrice.decimal && (
-                <sup style={{ fontSize: '14px' }} className="ms-1">
-                  {formattedPrice.decimal}
-                </sup>
+                <sup style={{ fontSize: '14px' }}>{formattedPrice.decimal}</sup>
               )}
             </h4>
             <span className="d-block mb-2">

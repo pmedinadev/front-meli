@@ -29,6 +29,7 @@ export default function SalesConditionForm() {
   const { MLPid } = useParams()
   const { updateProduct, getProduct } = useProducts()
   const router = useRouter()
+  const [product, setProduct] = useState(null)
   const [isLoadingProduct, setIsLoadingProduct] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [formData, setFormData] = useState({
@@ -46,6 +47,8 @@ export default function SalesConditionForm() {
       const productId = MLPid.replace('MLP', '')
       try {
         const productData = await getProduct(productId)
+        setProduct(productData)
+
         const filteredData = ALLOWED_FIELDS.reduce((acc, field) => {
           if (field === 'status') {
             acc[field] = 'published'
@@ -95,7 +98,7 @@ export default function SalesConditionForm() {
       }, {})
 
       await updateProduct(productId, dataToSubmit)
-      router.push(`/p/${MLPid}`)
+      router.push(product?.href)
     } catch (error) {
       console.error(error)
     }
