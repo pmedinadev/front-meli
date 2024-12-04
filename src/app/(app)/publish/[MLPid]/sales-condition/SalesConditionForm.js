@@ -1,27 +1,52 @@
 'use client'
 
+import { Button, Col, Container, Form, Row } from 'react-bootstrap'
+import Link from 'next/link'
+import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useAuth } from '@/hooks/auth'
+import { useProducts } from '@/hooks/useProducts'
 import CardContainer from '@/components/layout/CardContainer'
 import LoadingSpinner from '@/components/layout/LoadingSpinner'
-import { useAuth } from '@/hooks/auth'
-import Link from 'next/link'
-import { Button, Col, Container, Form, Row } from 'react-bootstrap'
-import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { useProducts } from '@/hooks/useProducts'
-import PricingSection from '@/components/publish/PricingSection'
-import PublicationTypeSection from '@/components/publish/PublicationTypeSection'
-import WarrantySection from '@/components/publish/WarrantySection'
-import DeliverySection from '@/components/publish/DeliverySection'
-import ChargesSummary from '@/components/publish/ChargesSummary'
+import PricingSection from '@/app/(app)/publish/[MLPid]/sales-condition/components/PricingSection'
+import PublicationTypeSection from '@/app/(app)/publish/[MLPid]/sales-condition/components/PublicationTypeSection'
+import WarrantySection from '@/app/(app)/publish/[MLPid]/sales-condition/components/WarrantySection'
+import ShippingSection from '@/app/(app)/publish/[MLPid]/sales-condition/components/ShippingSection'
+import ChargesSummary from '@/app/(app)/publish/[MLPid]/sales-condition/components/ChargesSummary'
+import { calculateShipping } from '@/utils/feeCalculator'
+import { determineShippingType } from '@/utils/shippingCalculator'
 
+/**
+ * Formulario para definir las condiciones de venta de un producto
+ * Incluye:
+ * - Precio y validaciones
+ * - Tipo de publicación (Gratuíta, Clásica, Premium)
+ * - Configuración de envío
+ * - Garantía
+ * - Resumen de cargos estimados
+ */
+
+// Campos permitidos para enviar al backend
 const ALLOWED_FIELDS = [
   'price',
   'publication_type',
+  'shipping_cost',
+  'shipping_type',
   'warranty_type',
   'warranty_duration',
   'warranty_duration_type',
   'status',
 ]
+
+// Valores por defecto para el formulario
+const DEFAULT_FORM_VALUES = {
+  price: '',
+  publication_type: 'classic',
+  warranty_type: 'seller',
+  warranty_duration: '30',
+  warranty_duration_type: 'days',
+  status: 'published',
+}
 
 export default function SalesConditionForm() {
   const { user } = useAuth({ middleware: 'auth' })
@@ -40,32 +65,30 @@ export default function SalesConditionForm() {
     warranty_duration_type: 'days', // Valor por defecto para garantía
     status: 'published',
   })
+  const [selectedShipping, setSelectedShipping] = useState('free')
 
   useEffect(() => {
     const loadProductData = async () => {
       setIsLoadingProduct(true)
-      const productId = MLPid.replace('MLP', '')
       try {
-        const productData = await getProduct(productId)
+        const productData = await getProduct(MLPid.replace('MLP', ''))
         setProduct(productData)
 
+        // Filtrar los campos permitidos y asignar valores por defecto
         const filteredData = ALLOWED_FIELDS.reduce((acc, field) => {
           if (field === 'status') {
             acc[field] = 'published'
           } else if (field === 'price') {
             acc[field] = productData[field]?.toString() || ''
           } else {
-            acc[field] = productData[field] || formData[field]
+            acc[field] = productData[field] || DEFAULT_FORM_VALUES[field]
           }
           return acc
         }, {})
 
-        setFormData(prev => ({
-          ...prev,
-          ...filteredData,
-        }))
+        setFormData(prev => ({ ...prev, ...filteredData }))
       } catch (error) {
-        console.error(error)
+        console.error('Error loading product:', error)
       } finally {
         setIsLoadingProduct(false)
       }
@@ -74,23 +97,44 @@ export default function SalesConditionForm() {
     loadProductData()
   }, [MLPid])
 
+  // Manejar cambios en los campos del formulario
   const handleChange = e => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }))
+    setFormData(prev => ({ ...prev, [name]: value }))
   }
 
+  // Enviar el formulario
   const handleSubmit = async e => {
     e.preventDefault()
     setSubmitting(true)
 
     try {
       const productId = MLPid.replace('MLP', '')
+      const numericPrice = parseFloat(formData.price)
+
+      // Calcular costos de envío
+      const { cost: shippingCost } = calculateShipping(
+        numericPrice,
+        product?.condition,
+        formData.publication_type,
+      )
+
+      // Determinar quién paga el envío
+      const shippingType = determineShippingType(
+        shippingCost,
+        numericPrice,
+        formData.publication_type,
+        selectedShipping,
+      )
+
+      // Filtrar los campos permitidos y enviar al backend
       const dataToSubmit = ALLOWED_FIELDS.reduce((acc, field) => {
         if (field === 'price') {
-          acc[field] = parseFloat(formData[field])
+          acc[field] = numericPrice
+        } else if (field === 'shipping_cost') {
+          acc[field] = shippingCost
+        } else if (field === 'shipping_type') {
+          acc[field] = shippingType
         } else {
           acc[field] = formData[field]
         }
@@ -100,7 +144,7 @@ export default function SalesConditionForm() {
       await updateProduct(productId, dataToSubmit)
       router.push(product?.href)
     } catch (error) {
-      console.error(error)
+      console.error('Error updating product:', error)
     }
 
     setSubmitting(false)
@@ -146,7 +190,14 @@ export default function SalesConditionForm() {
               </CardContainer>
 
               <CardContainer className="bg-body mb-4">
-                <DeliverySection />
+                <ShippingSection
+                  publicationType={formData.publication_type}
+                  price={formData.price}
+                  condition={product?.condition}
+                  selectedShipping={selectedShipping}
+                  onShippingChange={setSelectedShipping}
+                  shippingType={product?.shipping_type}
+                />
               </CardContainer>
 
               <CardContainer className="bg-body mb-4">
@@ -173,6 +224,8 @@ export default function SalesConditionForm() {
         <ChargesSummary
           price={formData.price}
           publicationType={formData.publication_type}
+          condition={product?.condition}
+          selectedShipping={selectedShipping}
         />
       </Col>
     </Row>
