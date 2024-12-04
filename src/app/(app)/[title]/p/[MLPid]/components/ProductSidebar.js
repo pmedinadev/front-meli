@@ -25,12 +25,17 @@ export default function ProductSidebar({
   )
   const isSingleUnit = product.stock === 1
 
+  const productTitle =
+    product.condition === 'new'
+      ? product.title
+      : `${product.title} (${CONDITIONS[product.condition]})`
+
   return (
     <div className="border rounded p-3 mb-3">
       <p className="text-muted mb-2">
-        <small>{CONDITIONS[product.condition] || product.condition}</small>
+        <small>{CONDITIONS[product.condition]}</small>
       </p>
-      <h5 className="fw-bold">{product.title}</h5>
+      <h5 className="fw-bold">{productTitle}</h5>
       <h2 className="fw-light mb-3">
         $ {formatPrice(product.price).whole}
         {formatPrice(product.price).decimal && (
