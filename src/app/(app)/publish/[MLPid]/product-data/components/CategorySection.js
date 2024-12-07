@@ -1,5 +1,5 @@
 import { Col, FormSelect, Row } from 'react-bootstrap'
-import CardInfo from '../layout/CardInfo'
+import CardInfo from '../../../../../../components/layout/CardInfo'
 import { INFO_CARDS } from '@/constants/product'
 
 export default function CategorySection({

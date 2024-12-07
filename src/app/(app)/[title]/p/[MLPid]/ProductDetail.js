@@ -13,6 +13,7 @@ import ProductSidebar from './components/ProductSidebar'
 import SellerInfo from './components/SellerInfo'
 import SuccessOffcanvas from './components/SuccessOffcanvas'
 import Link from 'next/link'
+import CardInfo from '@/components/layout/CardInfo'
 
 export default function ProductDetail({ initialProduct }) {
   // Hooks
@@ -90,6 +91,17 @@ export default function ProductDetail({ initialProduct }) {
     loadCartQuantity()
   }, [user, product])
 
+  const conditionCardInfo = {
+    used: {
+      title: 'Producto usado',
+      desc: 'Puede tener marcas estéticas, daños funcionales y no incluir su empaque o sus accesorios originales. Lee atentamente la descripción o pregúntale al vendedor para conocer más.',
+    },
+    reaconditioned: {
+      title: 'Producto reacondicionado',
+      desc: 'Es un producto con uso previo que puede haber pasado por un proceso de inspección, limpieza o reparación para asegurar su funcionamiento. Puede no incluir accesorios y el empaque original.',
+    },
+  }
+
   // Protectores de renderizado
   if (loading) return <LoadingSpinner />
   if (!product) return null
@@ -122,6 +134,15 @@ export default function ProductDetail({ initialProduct }) {
             {/* Descripción */}
             <div className="border-top border-bottom px-3 py-5">
               <h5 className="fw-normal">Descripción</h5>
+              {product.condition !== 'new' && (
+                <CardInfo
+                  color="primary"
+                  icon="info-circle-fill"
+                  title={conditionCardInfo[product.condition]?.title}
+                  desc={conditionCardInfo[product.condition]?.desc}
+                  className="my-4"
+                />
+              )}
               <p style={{ whiteSpace: 'pre-line' }} className="mb-0 text-muted">
                 {product.description || 'Sin descripción'}
               </p>

@@ -60,7 +60,7 @@ export default function CartItem({
         <Row className="align-items-center">
           {/* Imagen del producto */}
           <Col xs="auto">
-            <Link href={`/p/MLP${product.id}`}>
+            <Link href={product.href}>
               <CldImage
                 src={product.photos?.[0]?.public_id || 'users/placeholder'}
                 width={64}
@@ -74,7 +74,7 @@ export default function CartItem({
           {/* Título y acciones */}
           <Col xs={6}>
             <Link
-              href={`/p/MLP${product.id}`}
+              href={product.href}
               className="link-dark text-decoration-none text-truncate">
               <h6 className="mb-1 text-truncate">{product.title}</h6>
             </Link>

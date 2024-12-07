@@ -1,5 +1,5 @@
-import { notFound } from 'next/navigation'
 import ProductDetail from './ProductDetail'
+import { notFound } from 'next/navigation'
 
 async function getProduct(id) {
   try {
@@ -9,7 +9,7 @@ async function getProduct(id) {
     )
     const data = await response.json()
 
-    if (data.product?.status !== 'published') {
+    if (!data.product || data.product?.status !== 'published') {
       return null
     }
 
@@ -27,10 +27,11 @@ function formatTitlePrice(price) {
 }
 
 export async function generateMetadata({ params }) {
-  const productId = params.MLPid.replace('MLP', '')
+  const { title, MLPid } = params
+  const productId = MLPid.replace('MLP', '')
   const product = await getProduct(productId)
 
-  if (!product) {
+  if (!product || title !== product.slug) {
     return {
       title: 'Producto no disponible',
       description: 'Este producto no está disponible actualmente',
@@ -60,12 +61,14 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductPage({ params }) {
-  const productId = params.MLPid.replace('MLP', '')
-  const initialProduct = await getProduct(productId)
+  const { title, MLPid } = params
+  const productId = MLPid.replace('MLP', '')
 
-  if (!initialProduct) {
+  const product = await getProduct(productId)
+
+  if (!product || title !== product.slug) {
     notFound()
   }
 
-  return <ProductDetail initialProduct={initialProduct} />
+  return <ProductDetail initialProduct={product} />
 }

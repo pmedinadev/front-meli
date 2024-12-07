@@ -30,12 +30,27 @@ const DurationInput = ({ duration, durationType, onChange }) => (
   </InputGroup>
 )
 
+/**
+ * Sección para configurar la garantía del producto
+ * - Permite seleccionar el tipo de garantía
+ * - Incluye duración personalizable
+ * - Mantiene estado cuando se cambia entre tipos de garantía
+ */
 export default function WarrantySection({
   warranty,
   duration,
   durationType,
   onChange,
 }) {
+  const handleWarrantyClick = value => {
+    onChange({
+      target: {
+        name: 'warranty_type',
+        value,
+      },
+    })
+  }
+
   return (
     <>
       <div className="p-4">
@@ -49,15 +64,21 @@ export default function WarrantySection({
         <Row>
           <Col xs={6}>
             <div className="mb-3">
-              <FormCheck
-                type="radio"
-                name="warranty_type"
-                value="seller"
-                label="Garantía del vendedor"
-                checked={warranty === 'seller'}
-                onChange={onChange}
-                className="mb-3"
-              />
+              <div
+                className="d-inline-flex"
+                onClick={() => handleWarrantyClick('seller')}>
+                <FormCheck
+                  type="radio"
+                  name="warranty_type"
+                  value="seller"
+                  checked={warranty === 'seller'}
+                  onChange={onChange}
+                  className="mb-3"
+                />
+                <span className="ms-2" style={{ cursor: 'pointer' }}>
+                  Garantía del vendedor
+                </span>
+              </div>
               {warranty === 'seller' && (
                 <DurationInput
                   duration={duration}
@@ -68,15 +89,21 @@ export default function WarrantySection({
             </div>
 
             <div className="mb-3">
-              <FormCheck
-                type="radio"
-                name="warranty_type"
-                value="manufacturer"
-                label="Garantía de fábrica"
-                checked={warranty === 'manufacturer'}
-                onChange={onChange}
-                className="mb-3"
-              />
+              <div
+                className="d-inline-flex"
+                onClick={() => handleWarrantyClick('manufacturer')}>
+                <FormCheck
+                  type="radio"
+                  name="warranty_type"
+                  value="manufacturer"
+                  checked={warranty === 'manufacturer'}
+                  onChange={onChange}
+                  className="mb-3"
+                />
+                <span className="ms-2" style={{ cursor: 'pointer' }}>
+                  Garantía de fábrica
+                </span>
+              </div>
               {warranty === 'manufacturer' && (
                 <DurationInput
                   duration={duration}
@@ -86,15 +113,19 @@ export default function WarrantySection({
               )}
             </div>
 
-            <div>
+            <div
+              className="d-inline-flex"
+              onClick={() => handleWarrantyClick('none')}>
               <FormCheck
                 type="radio"
                 name="warranty_type"
                 value="none"
-                label="Sin garantía"
                 checked={warranty === 'none'}
                 onChange={onChange}
               />
+              <span className="ms-2" style={{ cursor: 'pointer' }}>
+                Sin garantía
+              </span>
             </div>
           </Col>
         </Row>

@@ -120,7 +120,7 @@ export default function Navigation() {
                       ? suggestions.map(product => (
                           <Link
                             key={product.id}
-                            href={`/p/MLP${product.id}`}
+                            href={product.href}
                             className="d-block py-2 px-3 text-decoration-none text-black hover-bg-primary text-truncate">
                             <i className="bi bi-search me-3 opacity-50" />
                             {product.title}

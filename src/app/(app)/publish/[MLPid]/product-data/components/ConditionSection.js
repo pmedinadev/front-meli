@@ -1,6 +1,6 @@
 import { CONDITION_OPTIONS, INFO_CARDS } from '@/constants/product'
 import { Col, FormCheck, Row } from 'react-bootstrap'
-import CardInfo from '../layout/CardInfo'
+import CardInfo from '../../../../../../components/layout/CardInfo'
 
 export default function ConditionSection({ condition, onChange, onShowModal }) {
   return (

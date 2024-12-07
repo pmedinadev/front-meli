@@ -1,5 +1,5 @@
 import { CONDITIONS } from '@/constants/product'
-import { formatPrice } from '@/utils/formatters'
+import { formatPrice, formatWarranty } from '@/utils/formatters'
 import {
   Button,
   Col,
@@ -25,18 +25,44 @@ export default function ProductSidebar({
   )
   const isSingleUnit = product.stock === 1
 
+  const productTitle =
+    product.condition === 'new'
+      ? product.title
+      : `${product.title} (${CONDITIONS[product.condition]})`
+
   return (
     <div className="border rounded p-3 mb-3">
+      {/* Condición del producto */}
       <p className="text-muted mb-2">
-        <small>{CONDITIONS[product.condition] || product.condition}</small>
+        <small>{CONDITIONS[product.condition]}</small>
       </p>
-      <h5 className="fw-bold">{product.title}</h5>
+
+      {/* Título del producto */}
+      <h5 className="fw-bold">{productTitle}</h5>
+
+      {/* Precio del producto */}
       <h2 className="fw-light mb-3">
         $ {formatPrice(product.price).whole}
         {formatPrice(product.price).decimal && (
           <sup className="fs-6 ms-1">{formatPrice(product.price).decimal}</sup>
         )}
       </h2>
+
+      {/* Envío del producto */}
+      {product.shipping_type === 'paid_by_seller' ? (
+        <span className="fw-medium text-success-meli">Envío gratis</span>
+      ) : (
+        <span>
+          Envío por $ {formatPrice(product.shipping_cost).whole}
+          {formatPrice(product.shipping_cost).decimal && (
+            <sup style={{ fontSize: '10px' }}>
+              {formatPrice(product.shipping_cost).decimal}
+            </sup>
+          )}
+        </span>
+      )}
+
+      {/* Stock del producto */}
       <div className="my-3">
         {isSingleUnit ? (
           <span className="fw-bold">¡Última disponible!</span>
@@ -54,6 +80,7 @@ export default function ProductSidebar({
         )}
       </div>
 
+      {/* Selector de unidades */}
       {!isSingleUnit && (
         <Row className="g-0 align-items-center mb-3">
           <FormLabel column className="col-auto me-2">
@@ -75,9 +102,12 @@ export default function ProductSidebar({
         </Row>
       )}
 
+      {/* Botón de compra inmediata */}
       <Button className="bg-button-primary-meli w-100 fw-medium py-2 mb-2">
         Comprar ahora
       </Button>
+
+      {/* Botón de agregar al carrito */}
       <Button
         variant="light"
         onClick={() => onAddToCart()}
@@ -96,12 +126,26 @@ export default function ProductSidebar({
         )}
       </Button>
 
-      {/* Add error message display */}
+      {/* Mensaje de error para carrito de compras */}
       {errorMessage && (
         <div className="text-danger mt-2">
           <small>{errorMessage}</small>
         </div>
       )}
+
+      {/* Garantía del producto */}
+      <div className="text-muted mt-3">
+        <small>
+          <i className="bi bi-award me-2" />
+          <span>
+            {formatWarranty(
+              product.warranty_type,
+              product.warranty_duration,
+              product.warranty_duration_type,
+            )}
+          </span>
+        </small>
+      </div>
     </div>
   )
 }
