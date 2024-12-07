@@ -48,6 +48,20 @@ export default function ProductSidebar({
         )}
       </h2>
 
+      {/* Envío del producto */}
+      {product.shipping_type === 'paid_by_seller' ? (
+        <span className="fw-medium text-success-meli">Envío gratis</span>
+      ) : (
+        <span>
+          Envío por $ {formatPrice(product.shipping_cost).whole}
+          {formatPrice(product.shipping_cost).decimal && (
+            <sup style={{ fontSize: '10px' }}>
+              {formatPrice(product.shipping_cost).decimal}
+            </sup>
+          )}
+        </span>
+      )}
+
       {/* Stock del producto */}
       <div className="my-3">
         {isSingleUnit ? (

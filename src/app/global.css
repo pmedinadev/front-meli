@@ -2,6 +2,12 @@
 .bg-primary-meli {
   background-color: #fee600;
 }
+.bg-success-meli {
+  background-color: #00a650;
+}
+.text-success-meli {
+  color: #00a650;
+}
 .bg-body-meli {
   background-color: #ededed;
 }

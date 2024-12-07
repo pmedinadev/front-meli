@@ -52,17 +52,16 @@ export default function CategoryDetail() {
                     </span>
                   </div>
                   <small>
-                    <span className="d-block text-success fw-medium mb-2">
-                      Envío gratis
-                    </span>
+                    {product.shipping_type === 'paid_by_seller' && (
+                      <span className="d-block text-success fw-medium mb-2">
+                        Envío gratis
+                      </span>
+                    )}
                     <span className="category-detail-product-title">
                       {product.title}
                     </span>
                   </small>
-                  <Link
-                    href={product.href}
-                    className="stretched-link"
-                  />
+                  <Link href={product.href} className="stretched-link" />
                 </CardBody>
               </Card>
             </Col>

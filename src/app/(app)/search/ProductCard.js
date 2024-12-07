@@ -39,7 +39,11 @@ export default function ProductCard({ product }) {
               )}
             </h4>
             <span className="d-block mb-2">
-              <small className="fw-medium text-success">Envío gratis</small>
+              {product.shipping_type === 'paid_by_seller' && (
+                <small className="fw-medium text-success-meli">
+                  Envío gratis
+                </small>
+              )}
             </span>
             <span className="d-block">
               <small className="text-muted">
