@@ -11,11 +11,11 @@ export default function HelpPage() {
             <Col>
           <FormControl
             placeholder="Buscar en Ayuda"
-            className="mb-4 p-3 border-secondary"
+            className="mb-4 p-2 border-secondary"
           />
           </Col>
           <Col xs="auto">
-          <Button variante="primary" className="mb-3 p-2">
+          <Button variante="primary" className="mb-4 p-2 ">
             Buscar
           </Button>
           </Col>
@@ -350,8 +350,62 @@ export default function HelpPage() {
               </Col>
             </Row>
           </CardContainer>
+
+              <footer className="bounds bg-white text-black pt-6 ">
+          <Container>
+            <Row>
+              <Col md={3} sm={6}>
+                <h6>Acerca de</h6>
+                <ul className="text-light list-unstyled">
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Mercado Libre</a></li>
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Investor Relations</a></li>
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Tendencias</a></li>
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Sustentabilidad</a></li>
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Blog</a></li>
+                </ul>
+              </Col>
+              <Col md={3} sm={6}>
+                <h6>Ayuda</h6>
+                <ul className="mb-0 text-muted list-unstyled">
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Comprar</a></li>
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Vender</a></li>
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Resolucion de problemas</a></li>
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Centro de seguridad</a></li>
+
+                </ul>
+              </Col>
+              <Col md={3} sm={6}>
+                <h6>Redes Sociales</h6>
+                <div className="d-flex">
+                  <a href="https://www.facebook.com/mex.mercadolibre/?brand_redir=23221995011" className=" text-muted text-black me-3"><i className="bi bi-facebook"></i></a>
+                  <a href="https://www.youtube.com/user/mercadolibre" className="text-muted text-black me-3"><i className="bi bi-youtube"></i></a>
+                  <a href="https://x.com/ML_Mexico" className="text-muted text-black"><i className="bi bi-x"></i></a>
+                  <a href="https://www.tiktok.com/@mercadolibre.mex?lang=es" className="text-muted text-black"><i className="bi bi-tiktok"></i></a>
+
+                </div>
+              </Col>
+              <Col md={3} sm={6}>
+                <h6>Mi cuenta</h6>
+                <ul className="mb-0 list-unstyled">
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Ingresa</a></li>
+                  
+                  <li><a href="#" className="text-muted text-black text-decoration-none">Compras</a></li>
+                </ul>
+              </Col>
+            </Row>
+
+
+            <hr className="bg-black" />
+            <Row>
+              <Col>
+                <p className="text-center mb-0">© 2024 Mercado Libre</p>
+              </Col>
+            </Row>
+          </Container>
+        </footer>
+    </div>
+
         </div>
-      </div>
     </Container>
   )
 }
