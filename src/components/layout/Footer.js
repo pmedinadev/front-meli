@@ -3,12 +3,12 @@ import { Container, Row, Col, Accordion, AccordionItem, AccordionBody, Accordion
 
 export default function Footer() {
   return (
-    <footer className="bounds bg-white text-black pt-5 pb-5">
+    <footer className=" bg-white text-black">
       <Container>
         <Accordion>
           <AccordionItem eventKey="0">
-            <AccordionHeader className='fs-13.3333'>Mas informacion</AccordionHeader>
-            <AccordionBody>
+            <AccordionHeader>Mas informacion</AccordionHeader>
+            <AccordionBody className='p-0'>
               <Row>
                 <Col md={2} sm={6} className="mb-4">
                   <h6>Acerca de</h6>
@@ -67,52 +67,42 @@ export default function Footer() {
                   </ul>
                 </Col>
               </Row>
-
-              <hr className="bg-black" />
-              <Row>
-                <Col>
-                  <p className="text-center mb-0">© 2024 Mercado Libre</p>
-                </Col>
-              </Row>
+             
             </AccordionBody>
           </AccordionItem>
         </Accordion>
 
-        <Container className="py-4 container-ml">
+        <Container id="" className="p-0 container-ml">
   <Row className="justify-content-center text-nowrap">
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-3">
+    <Col className="list-unstyled mb-2 text-center mx-1 p-0 m-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Trabaja con nosotros</a></li>
     </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-3">
+    <Col className="list-unstyled mb-2 text-center mx-1 p-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Términos y condiciones</a></li>
     </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-3">
+    <Col className="list-unstyled mb-2 text-center mx-1 p-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Promociones</a></li>
     </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-3">
+    <Col className="list-unstyled mb-2 text-center mx-1 p-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Cómo cuidamos tu privacidad</a></li>
     </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-3">
+    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-1 p-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Accesibilidad</a></li>
     </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-3">
+    <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Ayuda</a></li>
     </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-3">
+    <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Hot Sale</a></li>
     </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-3">
+    <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Programa de Afiliados</a></li>
     </Col>
   </Row>
 </Container>
-
-
-
-
         <small className="small-text mt-4 text-muted">
-          <p>Copyright © 1999-2024 El presente canal de instrucción o ambiente, es operado por DeRemate.Com de México, S. de R.L. de C.V. identificada bajo la marca comercial "Mercado Libre".</p>
-          <p>Blvd. Miguel de Cervantes Saavedra 161, Pisos 14 y 15, Granada, Miguel Hidalgo, 11520 Ciudad de México, CDMX, México</p>
+          <p className=' small-text m-0'>Copyright © 1999-2024 El presente canal de instrucción o ambiente, es operado por DeRemate.Com de México, S. de R.L. de C.V. identificada bajo la marca comercial "Mercado Libre".
+          Blvd. Miguel de Cervantes Saavedra 161, Pisos 14 y 15, Granada, Miguel Hidalgo, 11520 Ciudad de México, CDMX, México</p>
         </small>
       </Container>
     </footer>
