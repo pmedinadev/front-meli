@@ -90,7 +90,7 @@ export default function Footer() {
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Accesibilidad</a></li>
     </Col>
     <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
-      <li><a href="#" className="text-black text-decoration-none d-inline-block small">Ayuda</a></li>
+      <li><a href="http://localhost:3000/help" className="text-black text-decoration-none d-inline-block small">Ayuda</a></li>
     </Col>
     <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
       <li><a href="#" className="text-black text-decoration-none d-inline-block small">Hot Sale</a></li>

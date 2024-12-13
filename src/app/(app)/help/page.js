@@ -328,7 +328,7 @@ export default function HelpPage() {
           </CardContainer>
 
           <h5>Ayuda sobre tu cuenta</h5>
-          <CardContainer className="bg-light mb-3 p-3">
+          <CardContainer className="bg-light mb-5 p-3">
             <Row className="align-items-center">
               <Col>
                 <h6 className="mb-0">Configuración de mi cuenta</h6>
@@ -349,6 +349,21 @@ export default function HelpPage() {
                 <i className="bi bi-chevron-right" />
               </Col>
             </Row>
+          </CardContainer>
+
+          <h5>¿Nesesitas mas ayuda?</h5>
+          <CardContainer className="bg-light mb-3 p-3">
+            <Row className="align-items-center">
+              <Col>
+                <h6 className="mb-0">Contactanos</h6>
+              </Col>
+              <Col xs="auto">
+              </Col>
+              <Col xs="auto" className="d-flex align-items-center">
+                <i className="bi bi-chevron-right" />
+              </Col>
+            </Row>
+            
           </CardContainer>
 
     </div>
