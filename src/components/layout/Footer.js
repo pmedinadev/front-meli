@@ -2,8 +2,28 @@ import React from 'react';
 import { Container, Row, Col, Accordion, AccordionItem, AccordionBody, AccordionHeader } from 'react-bootstrap';
 
 export default function Footer() {
+  const styles = {
+    bodyWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+    },
+    mainContent: {
+      flex: 1,
+    },
+    footer: {
+      backgroundColor: 'white',
+      color: 'black',
+      padding: '20px 0',
+    },
+  };
+
   return (
-    <footer className=" bg-white text-black">
+    <div style={styles.bodyWrapper}>
+      <main style={styles.mainContent}>
+       
+      </main>
+    <footer style={styles.footer} className=" bg-white text-black">
       <Container>
         <Accordion>
           <AccordionItem eventKey="0">
@@ -72,39 +92,40 @@ export default function Footer() {
           </AccordionItem>
         </Accordion>
 
-        <Container id="" className="p-0 container-ml">
-  <Row className="justify-content-center text-nowrap">
-    <Col className="list-unstyled mb-2 text-center mx-1 p-0 m-0">
-      <li><a href="#" className="text-black text-decoration-none d-inline-block small">Trabaja con nosotros</a></li>
-    </Col>
-    <Col className="list-unstyled mb-2 text-center mx-1 p-0">
-      <li><a href="#" className="text-black text-decoration-none d-inline-block small">Términos y condiciones</a></li>
-    </Col>
-    <Col className="list-unstyled mb-2 text-center mx-1 p-0">
-      <li><a href="#" className="text-black text-decoration-none d-inline-block small">Promociones</a></li>
-    </Col>
-    <Col className="list-unstyled mb-2 text-center mx-1 p-0">
-      <li><a href="#" className="text-black text-decoration-none d-inline-block small">Cómo cuidamos tu privacidad</a></li>
-    </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-1 p-0">
-      <li><a href="#" className="text-black text-decoration-none d-inline-block small">Accesibilidad</a></li>
-    </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
-      <li><a href="http://localhost:3000/help" className="text-black text-decoration-none d-inline-block small">Ayuda</a></li>
-    </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
-      <li><a href="#" className="text-black text-decoration-none d-inline-block small">Hot Sale</a></li>
-    </Col>
-    <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
-      <li><a href="#" className="text-black text-decoration-none d-inline-block small">Programa de Afiliados</a></li>
-    </Col>
-  </Row>
-</Container>
+       <Container id="" className="p-0 container-ml">
+              <Row className="justify-content-center text-nowrap">
+                <Col className="list-unstyled mb-2 text-center mx-1 p-0 m-0">
+                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Trabaja con nosotros</a></li>
+                </Col>
+                <Col className="list-unstyled mb-2 text-center mx-1 p-0">
+                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Términos y condiciones</a></li>
+                </Col>
+                <Col className="list-unstyled mb-2 text-center mx-1 p-0">
+                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Promociones</a></li>
+                </Col>
+                <Col className="list-unstyled mb-2 text-center mx-1 p-0">
+                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Cómo cuidamos tu privacidad</a></li>
+                </Col>
+                <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-1 p-0">
+                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Accesibilidad</a></li>
+                </Col>
+                <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
+                  <li><a href="http://localhost:3000/help" className="text-black text-decoration-none d-inline-block small">Ayuda</a></li>
+                </Col>
+                <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
+                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Hot Sale</a></li>
+                </Col>
+                <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
+                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Programa de Afiliados</a></li>
+                </Col>
+              </Row>
+      </Container>
         <small className="small-text mt-4 text-muted">
           <p className=' small-text m-0'>Copyright © 1999-2024 El presente canal de instrucción o ambiente, es operado por DeRemate.Com de México, S. de R.L. de C.V. identificada bajo la marca comercial "Mercado Libre".
           Blvd. Miguel de Cervantes Saavedra 161, Pisos 14 y 15, Granada, Miguel Hidalgo, 11520 Ciudad de México, CDMX, México</p>
         </small>
       </Container>
     </footer>
+    </div>
   );
 }
