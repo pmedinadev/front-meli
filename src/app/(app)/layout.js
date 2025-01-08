@@ -3,11 +3,11 @@ import Navigation from '@/components/layout/Navigation'
 
 const AppLayout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <>
       <Navigation />
-      <main>{children}</main>
+      <main className="main-content">{children}</main>
       <Footer />
-    </div>
+    </>
   )
 }
 

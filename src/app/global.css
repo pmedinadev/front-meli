@@ -1,3 +1,47 @@
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('/fonts/proximanova-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('/fonts/proximanova-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('/fonts/proximanova-semibold.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('/fonts/proximanova-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('/fonts/proximanova-extrabold-webfont.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-proxima: 'Proxima Nova', -apple-system, Roboto, Arial, sans-serif;
+}
+
 /* Colores de fondo de Mercado Libre */
 .bg-primary-meli {
   background-color: #fee600;
@@ -20,8 +64,22 @@
 .bg-button-secondary-meli {
   background-color: #e4edfc;
 }
+.bg-btn-secondary {
+  background-color: #dae0f0;
+}
 .bg-button-secondary-meli:hover {
   background-color: #dae7ff;
+}
+
+html,
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex-grow: 1;
 }
 
 /* Estilos para el inicio */
@@ -52,7 +110,7 @@
 
 /* Estilos para la sidebar de Perfil */
 .sidebar-container {
-  height: calc(100vh - 56px); /* 56px la altura del header */
+  height: calc(100vh - 98px); /* 98px la altura del header */
 }
 
 /* Estilos para el botón de seleccionar fotos */

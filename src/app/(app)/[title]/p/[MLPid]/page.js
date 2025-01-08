@@ -3,10 +3,10 @@ import { notFound } from 'next/navigation'
 
 async function getProduct(id) {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products/${id}`,
-      { cache: 'no-store' },
-    )
+    const baseUrl = 'http://127.0.0.1:8000'
+    const response = await fetch(`${baseUrl}/api/products/${id}`, {
+      cache: 'no-store',
+    })
     const data = await response.json()
 
     if (!data.product || data.product?.status !== 'published') {

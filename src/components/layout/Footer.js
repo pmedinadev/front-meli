@@ -1,131 +1,142 @@
-import React from 'react';
-import { Container, Row, Col, Accordion, AccordionItem, AccordionBody, AccordionHeader } from 'react-bootstrap';
+'use client'
+
+import { Collapse, Container } from 'react-bootstrap'
+import { useState } from 'react'
+
+const FOOTER_SECTIONS = [
+  {
+    title: 'Acerca de',
+    links: [
+      'Mercado Libre',
+      'Investor relations',
+      'Tendencias',
+      'Sustentabilidad',
+      'Blog',
+    ],
+  },
+  {
+    title: 'Otros sitios',
+    links: [
+      'Developers',
+      'Mercado Pago',
+      'Mercado Shops',
+      'Envíos',
+      'Mercado Ads',
+    ],
+  },
+  {
+    title: 'Ayuda',
+    links: [
+      'Comprar',
+      'Vender',
+      'Resolución de problemas',
+      'Centro de seguridad',
+    ],
+  },
+  {
+    title: 'Redes sociales',
+    links: ['X', 'Facebook', 'YouTube'],
+  },
+  {
+    title: 'Mi cuenta',
+    links: ['Resumen', 'Favoritos', 'Vender'],
+  },
+  {
+    title: 'Suscripciones',
+    links: [
+      'Meli+',
+      'Disney+',
+      'Deezer Premium',
+      'Max',
+      'Paramount+',
+      'VIX Premium',
+    ],
+  },
+  {
+    title: 'Temporadas',
+    links: ['Buen Fin', 'Hot Sale', 'Black Friday'],
+  },
+]
+
+const FooterColumn = ({ title, links }) => (
+  <div className="d-flex flex-column">
+    <span className="text-body fw-medium mb-3">{title}</span>
+    {links.map((link, index) => (
+      <span key={index}>{link}</span>
+    ))}
+  </div>
+)
+
+const BUTTON_STYLES = {
+  fontSize: '13px',
+  color: '#666666',
+}
+
+const CONTENT_STYLES = {
+  fontSize: '14px',
+  color: '#999999',
+}
 
 export default function Footer() {
-  const styles = {
-    bodyWrapper: {
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100vh',
-    },
-    mainContent: {
-      flex: 1,
-    },
-    footer: {
-      backgroundColor: 'white',
-      color: 'black',
-      padding: '20px 0',
-    },
-  };
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleEntered = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    })
+  }
 
   return (
-    <div style={styles.bodyWrapper}>
-      <main style={styles.mainContent}>
-       
-      </main>
-    <footer style={styles.footer} className=" bg-white text-black">
-      <Container>
-        <Accordion>
-          <AccordionItem eventKey="0">
-            <AccordionHeader>Mas informacion</AccordionHeader>
-            <AccordionBody className='p-0'>
-              <Row>
-                <Col md={2} sm={6} className="mb-4">
-                  <h6>Acerca de</h6>
-                  <ul className="list-unstyled">
-                    <li><a href="#" className="text-muted text-decoration-none">Mercado Libre</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Investor Relations</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Tendencias</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Sustentabilidad</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Blog</a></li>
-                  </ul>
-                </Col>
-                <Col md={2} sm={6} className="mb-4">
-                  <h6>Otros sitios</h6>
-                  <ul className="list-unstyled">
-                    <li><a href="#" className="text-muted text-decoration-none">Developers</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Mercado Pago</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Mercado Shops</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Envios</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Mercado Ads</a></li>
-                  </ul>
-                </Col>
-                <Col md={2} sm={6} className="mb-4">
-                  <h6>Ayuda</h6>
-                  <ul className="list-unstyled">
-                    <li><a href="#" className="text-muted text-decoration-none">Comprar</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Vender</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Resolución de problemas</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Centro de seguridad</a></li>
-                  </ul>
-                </Col>
-                <Col md={2} sm={6} className="mb-4">
-                  <h6>Redes Sociales</h6>
-                  <ul className="list-unstyled">
-                    <li><a href="https://x.com/ML_Mexico" className="text-muted text-decoration-none">X</a></li>
-                    <li><a href="https://www.facebook.com/mex.mercadolibre/?brand_redir=23221995011" className="text-muted text-decoration-none">Facebook</a></li>
-                    <li><a href="https://www.youtube.com/user/mercadolibre" className="text-muted text-decoration-none">YouTube</a></li>
-                  </ul>
-                </Col>
-                <Col md={2} sm={6} className="mb-4">
-                  <h6>Mi cuenta</h6>
-                  <ul className="list-unstyled">
-                    <li><a href="#" className="text-muted text-decoration-none">Resumen</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Favoritos</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Vender</a></li>
-                  </ul>
-                </Col>
-                <Col md={2} sm={6} className="mb-4">
-                  <h6>Suscripciones</h6>
-                  <ul className="list-unstyled">
-                    <li><a href="#" className="text-muted text-decoration-none">Meli+</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Disney+</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Deezer Premium</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Max</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">Paramount+</a></li>
-                    <li><a href="#" className="text-muted text-decoration-none">ViX Premium</a></li>
-                  </ul>
-                </Col>
-              </Row>
-             
-            </AccordionBody>
-          </AccordionItem>
-        </Accordion>
+    <footer>
+      <div className="text-center">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`btn rounded-bottom-0 bg-${isOpen ? 'disabled-meli' : 'body'}`}
+          style={BUTTON_STYLES}
+          aria-expanded={isOpen}>
+          Más información
+          <i className={`bi bi-chevron-${isOpen ? 'down' : 'up'} ms-1`} />
+        </button>
+      </div>
 
-       <Container id="" className="p-0 container-ml">
-              <Row className="justify-content-center text-nowrap">
-                <Col className="list-unstyled mb-2 text-center mx-1 p-0 m-0">
-                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Trabaja con nosotros</a></li>
-                </Col>
-                <Col className="list-unstyled mb-2 text-center mx-1 p-0">
-                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Términos y condiciones</a></li>
-                </Col>
-                <Col className="list-unstyled mb-2 text-center mx-1 p-0">
-                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Promociones</a></li>
-                </Col>
-                <Col className="list-unstyled mb-2 text-center mx-1 p-0">
-                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Cómo cuidamos tu privacidad</a></li>
-                </Col>
-                <Col xs={6} sm={4} md={1} className="list-unstyled mb-2 text-center mx-1 p-0">
-                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Accesibilidad</a></li>
-                </Col>
-                <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
-                  <li><a href="http://localhost:3000/help" className="text-black text-decoration-none d-inline-block small">Ayuda</a></li>
-                </Col>
-                <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
-                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Hot Sale</a></li>
-                </Col>
-                <Col xs={6} sm={4} md={1} className="list-unstyled mb-1 text-center mx-1 p-0">
-                  <li><a href="#" className="text-black text-decoration-none d-inline-block small">Programa de Afiliados</a></li>
-                </Col>
-              </Row>
-      </Container>
-        <small className="small-text mt-4 text-muted">
-          <p className=' small-text m-0'>Copyright © 1999-2024 El presente canal de instrucción o ambiente, es operado por DeRemate.Com de México, S. de R.L. de C.V. identificada bajo la marca comercial "Mercado Libre".
-          Blvd. Miguel de Cervantes Saavedra 161, Pisos 14 y 15, Granada, Miguel Hidalgo, 11520 Ciudad de México, CDMX, México</p>
-        </small>
-      </Container>
+      <Collapse in={isOpen} onEntered={handleEntered}>
+        <div>
+          <div
+            className="d-flex gap-5 justify-content-center bg-disabled-meli py-5"
+            style={CONTENT_STYLES}>
+            {FOOTER_SECTIONS.map((section, index) => (
+              <FooterColumn key={index} {...section} />
+            ))}
+          </div>
+        </div>
+      </Collapse>
+
+      <div className="bg-body py-3 border-top">
+        <Container>
+          <div className="d-flex gap-3 pb-2" style={{ fontSize: '13px' }}>
+            <span>Trabaja con nosotros</span>
+            <span>Términos y condiciones</span>
+            <span>Promociones</span>
+            <span>Cómo cuidamos tu privacidad</span>
+            <span>Accesibilidad</span>
+            <span>Ayuda</span>
+            <span>Hot Sale</span>
+            <span>Programa de Afiliados</span>
+          </div>
+          <div style={{ fontSize: '12px' }}>
+            <span className="d-block" style={{ color: '#999999' }}>
+              Copyright © 1999-2025 El presente canal de instrucción o
+              ambiente, es operado por DeRemate.Com de México, S. de R.L. de
+              C.V. identificada bajo la marca comercial "Mercado Libre".
+            </span>
+            <span className="d-block">
+              Blvd. Miguel de Cervantes Saavedra 161, Pisos 14 y 15, Granada,
+              Miguel Hidalgo, 11520 Ciudad de México, CDMX, México
+            </span>
+          </div>
+        </Container>
+      </div>
     </footer>
-    </div>
-  );
+  )
 }
