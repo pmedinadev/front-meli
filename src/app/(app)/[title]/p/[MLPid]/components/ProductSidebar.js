@@ -1,7 +1,7 @@
 import { CONDITIONS } from '@/constants/product'
 import { useFavorites } from '@/hooks/useFavorites'
 import { formatPrice, formatWarranty } from '@/utils/formatters'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Button,
   Col,
@@ -12,6 +12,7 @@ import {
 } from 'react-bootstrap'
 import FavoriteButton from './FavoriteButton'
 import { useAuth } from '@/hooks/auth'
+import { useRouter } from 'next/navigation'
 
 const MAX_QUANTITY = 6
 
@@ -24,21 +25,60 @@ export default function ProductSidebar({
   errorMessage,
 }) {
   const { user } = useAuth()
-  const { addFavorite } = useFavorites() // Obtener la función para agregar a favoritos
-  const [isFavorite, setIsFavorite] = useState(false) // Estado para manejar si el producto está en favoritos
-  const [favoriteLoading, setFavoriteLoading] = useState(false) // Estado para manejar la carga
+  const { addFavorite, removeFavorite, isInFavorites } = useFavorites(
+    user?.favorite_id,
+  )
+  const router = useRouter()
+  const [isMounted, setIsMounted] = useState(false)
+  const [favoriteState, setFavoriteState] = useState({
+    isFavorite: false,
+    favoriteProductId: null,
+  })
 
-  const handleAddFavorite = async () => {
-    if (favoriteLoading) return // Evitar múltiples clics mientras se procesa
+  useEffect(() => {
+    setIsMounted(true)
+    return () => setIsMounted(false)
+  }, [])
 
-    setFavoriteLoading(true)
+  // Verificar si el producto está en favoritos
+  useEffect(() => {
+    if (isMounted && user?.favorite_id) {
+      isInFavorites.refetch()
+    }
+  }, [isMounted, user?.favorite_id, product.id])
+
+  useEffect(() => {
+    if (isInFavorites.data) {
+      const favoriteProduct = isInFavorites.data.find(p => p.id === product.id)
+      setFavoriteState({
+        isFavorite: !!favoriteProduct,
+        favoriteProductId: favoriteProduct?.favorite_product_id || null,
+      })
+    }
+  }, [isInFavorites.data, product.id])
+
+  const handleFavoriteClick = async () => {
+    if (!user) {
+      router.push('/login')
+      return
+    }
+
     try {
-      await addFavorite(user?.favorite_id, product.id)
-      setIsFavorite(true) // Cambiar el estado para reflejar que está en favoritos
+      if (favoriteState.isFavorite) {
+        await removeFavorite.mutateAsync(favoriteState.favoriteProductId)
+        setFavoriteState({ isFavorite: false, favoriteProductId: null })
+      } else {
+        const response = await addFavorite.mutateAsync({
+          favoriteId: user.favorite_id,
+          productId: product.id,
+        })
+        setFavoriteState({
+          isFavorite: true,
+          favoriteProductId: response.favorite_product.id,
+        })
+      }
     } catch (error) {
-      console.error('Error al agregar a favoritos:', error)
-    } finally {
-      setFavoriteLoading(false)
+      console.error('Error managing favorites:', error)
     }
   }
 
@@ -48,13 +88,6 @@ export default function ProductSidebar({
   )
   const isSingleUnit = product.stock === 1
 
-  if (!user) {
-    return null
-  }
-  const favoriteId = user?.favoriteId
-
-  console.log('usuario', user?.favorite_id)
-
   const productTitle =
     product.condition === 'new'
       ? product.title
@@ -62,16 +95,17 @@ export default function ProductSidebar({
 
   return (
     <div className="border rounded p-3 mb-3">
-      {/* Condición */}
       <div className="d-flex justify-content-between">
+        {/* Condición */}
         <p className="text-muted mb-2">
           <small>{CONDITIONS[product.condition] || product.condition}</small>
         </p>
+
+        {/* Botón de favoritos */}
         <FavoriteButton
-          productId={product.id}
-          favoriteId={favoriteId}
-          isFavorite={isFavorite}
-          handleFavoriteClick={handleAddFavorite}
+          isFavorite={favoriteState.isFavorite}
+          isLoading={addFavorite.isPending || removeFavorite.isPending}
+          handleFavoriteClick={handleFavoriteClick}
         />
       </div>
 

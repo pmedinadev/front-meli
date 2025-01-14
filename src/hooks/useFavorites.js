@@ -1,93 +1,67 @@
-import { useState } from 'react'
 import axios from '@/lib/axios'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-export const useFavorites = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+export const useFavorites = favoriteId => {
+  const queryClient = useQueryClient()
+
+  // Función para verificar si un producto está en favoritos
+  const isInFavorites = useQuery({
+    queryKey: ['product-in-favorites', favoriteId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/favorites/${favoriteId}`)
+      return data.favorite.products
+    },
+    enabled: !!favoriteId,
+  })
 
   // Función para agregar un producto a favoritos
-  const addFavorite = async (favoriteId, productId) => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const response = await axios.post(`/api/favoriteproducts`, {
+  const addFavorite = useMutation({
+    mutationFn: async ({ favoriteId, productId }) => {
+      const { data } = await axios.post('/api/favoriteproducts', {
         favorite_id: favoriteId,
         product_id: productId,
       })
-
-      if (response.status === 201) {
-        console.log(
-          'Producto agregado a favoritos:',
-          response.data.favoriteproducts,
-        )
-        return response.data.favoriteproducts // Devuelve el producto favorito agregado
-      } else {
-        throw new Error('Error al agregar el producto a favoritos')
-      }
-    } catch (error) {
-      setError(
-        error.response ? error.response.data.error : 'Internal Server Error',
-      )
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['favorites', favoriteId] })
+    },
+  })
 
   // Función para mostrar productos de favoritos
-  const getFavoriteProducts = async favoriteId => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.get(`/api/favorites/${favoriteId}`);
-
-      if (response.status === 200) {
-        console.log('Productos favoritos obtenidos:', response.data.favoriteproducts);
-        return response.data.favorite.products; // Devuelve la lista de productos favoritos
-      } else {
-        throw new Error('Error al obtener los productos favoritos');
-      }
-    } catch (error) {
-      setError(
-        error.response ? error.response.data.error : 'Internal Server Error',
-      );
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const getFavoriteProducts = useQuery({
+    queryKey: ['favorites', favoriteId],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/favorites/${favoriteId}`)
+      return data.favorite.products
+    },
+    enabled: !!favoriteId,
+  })
 
   // Función para eliminar un producto de favoritos
-  const removeFavorite = async favoriteId => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const response = await axios.delete(`/api/favoriteproducts/${favoriteId}`)
-
-      if (response.status === 200) {
-        console.log('Producto eliminado de favoritos:', response.data)
-        return response.data.message // Mensaje de éxito
-      } else {
-        throw new Error('Error al eliminar el producto de favoritos')
-      }
-    } catch (error) {
-      setError(
-        error.response ? error.response.data.error : 'Internal Server Error',
+  const removeFavorite = useMutation({
+    mutationFn: async favoriteProductId => {
+      const { data } = await axios.delete(
+        `/api/favoriteproducts/${favoriteProductId}`,
       )
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['favorites', favoriteId] })
+    },
+  })
 
   return {
-    loading,
-    error,
+    isInFavorites,
+    checkIfFavorite: productId => {
+      return isInFavorites.data?.some(product => product.id === productId)
+    },
     addFavorite,
     getFavoriteProducts,
     removeFavorite,
+    isInitialLoading: getFavoriteProducts.isLoading,
+    isLoading: addFavorite.isPending || removeFavorite.isPending,
+    error:
+      getFavoriteProducts.error || addFavorite.error || removeFavorite.error,
   }
 }
