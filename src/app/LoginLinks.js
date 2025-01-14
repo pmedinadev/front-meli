@@ -53,7 +53,7 @@ const LoginLinks = () => {
               className="link-body-emphasis text-decoration-none mx-3">
               Mis compras
             </Link>
-            <Link href="/" className="link-body-emphasis text-decoration-none">
+            <Link href="/favorites" className="link-body-emphasis text-decoration-none">
               Favoritos
             </Link>
           </small>

@@ -1,5 +1,7 @@
 import { CONDITIONS } from '@/constants/product'
+import { useFavorites } from '@/hooks/useFavorites'
 import { formatPrice, formatWarranty } from '@/utils/formatters'
+import { useState } from 'react'
 import {
   Button,
   Col,
@@ -8,6 +10,8 @@ import {
   Row,
   Spinner,
 } from 'react-bootstrap'
+import FavoriteButton from './FavoriteButton'
+import { useAuth } from '@/hooks/auth'
 
 const MAX_QUANTITY = 6
 
@@ -19,11 +23,37 @@ export default function ProductSidebar({
   loading,
   errorMessage,
 }) {
+  const { user } = useAuth()
+  const { addFavorite } = useFavorites() // Obtener la función para agregar a favoritos
+  const [isFavorite, setIsFavorite] = useState(false) // Estado para manejar si el producto está en favoritos
+  const [favoriteLoading, setFavoriteLoading] = useState(false) // Estado para manejar la carga
+
+  const handleAddFavorite = async () => {
+    if (favoriteLoading) return // Evitar múltiples clics mientras se procesa
+
+    setFavoriteLoading(true)
+    try {
+      await addFavorite(user?.favorite_id, product.id)
+      setIsFavorite(true) // Cambiar el estado para reflejar que está en favoritos
+    } catch (error) {
+      console.error('Error al agregar a favoritos:', error)
+    } finally {
+      setFavoriteLoading(false)
+    }
+  }
+
   const maxSelectableQuantity = Math.min(
     product.stock - (product.cart_quantity || 0),
     MAX_QUANTITY,
   )
   const isSingleUnit = product.stock === 1
+
+  if (!user) {
+    return null
+  }
+  const favoriteId = user?.favoriteId
+
+  console.log('usuario', user?.favorite_id)
 
   const productTitle =
     product.condition === 'new'
@@ -32,10 +62,18 @@ export default function ProductSidebar({
 
   return (
     <div className="border rounded p-3 mb-3">
-      {/* Condición del producto */}
-      <p className="text-muted mb-2">
-        <small>{CONDITIONS[product.condition]}</small>
-      </p>
+      {/* Condición */}
+      <div className="d-flex justify-content-between">
+        <p className="text-muted mb-2">
+          <small>{CONDITIONS[product.condition] || product.condition}</small>
+        </p>
+        <FavoriteButton
+          productId={product.id}
+          favoriteId={favoriteId}
+          isFavorite={isFavorite}
+          handleFavoriteClick={handleAddFavorite}
+        />
+      </div>
 
       {/* Título del producto */}
       <h5 className="fw-bold">{productTitle}</h5>
