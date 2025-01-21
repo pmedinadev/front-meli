@@ -1,18 +1,18 @@
 'use client'
 
-import CardContainer from '@/components/layout/CardContainer'
-import LoadingSpinner from '@/components/layout/LoadingSpinner'
-import { useAuth } from '@/hooks/auth'
-import { useCart } from '@/hooks/useCart'
-import { useProducts } from '@/hooks/useProducts'
-import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
+import { useAuth } from '@/hooks/auth'
+import { useProducts } from '@/hooks/useProducts'
+import { useCart } from '@/hooks/useCart'
+import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import ProductImages from './components/ProductImages'
 import ProductSidebar from './components/ProductSidebar'
 import SellerInfo from './components/SellerInfo'
 import SuccessOffcanvas from './components/SuccessOffcanvas'
-import Link from 'next/link'
+import LoadingSpinner from '@/components/layout/LoadingSpinner'
+import CardContainer from '@/components/layout/CardContainer'
 import CardInfo from '@/components/layout/CardInfo'
 
 export default function ProductDetail({ initialProduct }) {
@@ -165,7 +165,7 @@ export default function ProductDetail({ initialProduct }) {
           </Col>
         </Row>
       </CardContainer>
-      <div className="text-end mt-3">
+      {/* <div className="text-end mt-3">
         <small>
           <span>
             Publicación <strong>#{MLPid.replace('MLP', '')}</strong>
@@ -177,7 +177,7 @@ export default function ProductDetail({ initialProduct }) {
             </Link>
           </span>
         </small>
-      </div>
+      </div> */}
       <SuccessOffcanvas
         show={showOffcanvas}
         onHide={handleCloseOffcanvas}

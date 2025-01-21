@@ -59,11 +59,25 @@ export const useProducts = () => {
     }
   }
 
+  const getProductsByCategory = async categoryId => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await axios.get(`/api/products?category_id=${categoryId}`)
+      setLoading(false)
+      return response.data.products
+    } catch (error) {
+      setError(error.response ? error.response.data : error.message)
+      setLoading(false)
+    }
+  }
+
   return {
     getDraftProducts,
     createProduct,
     updateProduct,
     getProduct,
+    getProductsByCategory,
     loading,
     error,
   }

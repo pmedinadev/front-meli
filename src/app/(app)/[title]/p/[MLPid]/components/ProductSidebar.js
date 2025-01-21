@@ -1,5 +1,7 @@
 import { CONDITIONS } from '@/constants/product'
 import { useFavorites } from '@/hooks/useFavorites'
+import { useOrders } from '@/hooks/useOrders'
+import { useRouter } from 'next/navigation'
 import { formatPrice, formatWarranty } from '@/utils/formatters'
 import { useEffect, useState } from 'react'
 import {
@@ -12,7 +14,6 @@ import {
 } from 'react-bootstrap'
 import FavoriteButton from './FavoriteButton'
 import { useAuth } from '@/hooks/auth'
-import { useRouter } from 'next/navigation'
 
 const MAX_QUANTITY = 6
 
@@ -28,6 +29,7 @@ export default function ProductSidebar({
   const { addFavorite, removeFavorite, isInFavorites } = useFavorites(
     user?.favorite_id,
   )
+  const { createOrder } = useOrders()
   const router = useRouter()
   const [isMounted, setIsMounted] = useState(false)
   const [favoriteState, setFavoriteState] = useState({
@@ -79,6 +81,20 @@ export default function ProductSidebar({
       }
     } catch (error) {
       console.error('Error managing favorites:', error)
+    }
+  }
+
+  const handleBuyNow = async () => {
+    try {
+      const { order } = await createOrder.mutateAsync({
+        from_cart: false,
+        product_id: product.id,
+        quantity,
+      })
+
+      router.push(`/checkout/${order.id}/shipping-method`)
+    } catch (error) {
+      console.error('Error creating order:', error)
     }
   }
 
@@ -175,8 +191,11 @@ export default function ProductSidebar({
       )}
 
       {/* Botón de compra inmediata */}
-      <Button className="bg-button-primary-meli w-100 fw-medium py-2 mb-2">
-        Comprar ahora
+      <Button
+        className="bg-button-primary-meli w-100 fw-medium py-2 mb-2"
+        onClick={handleBuyNow}
+        disabled={createOrder.isPending}>
+        {createOrder.isPending ? 'Procesando...' : 'Comprar ahora'}
       </Button>
 
       {/* Botón de agregar al carrito */}

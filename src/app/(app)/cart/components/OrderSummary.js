@@ -2,13 +2,30 @@ import { Button } from 'react-bootstrap'
 import CardContainer from '@/components/layout/CardContainer'
 import { calculateTotals, getTotalSelectedUnits } from '@/utils/cartCalculator'
 import { formatPrice, formatPriceWithDecimals } from '@/utils/formatters'
+import { useRouter } from 'next/navigation'
+import { useOrders } from '@/hooks/useOrders'
 
 export default function OrderSummary({
   cartItems,
   selectedSellers,
   groupedItems,
 }) {
+  const router = useRouter()
+  const { createOrder } = useOrders()
   const totals = calculateTotals(cartItems, selectedSellers, groupedItems)
+
+  const handleCheckout = async () => {
+    try {
+      const { order } = await createOrder.mutateAsync({
+        from_cart: true,
+        selected_sellers: selectedSellers,
+      })
+
+      router.push(`checkout/${order.id}/shipping-method`)
+    } catch (error) {
+      console.error('Error al crear la orden:', error)
+    }
+  }
 
   return (
     <CardContainer
@@ -73,8 +90,11 @@ export default function OrderSummary({
             </div>
             <Button
               className="w-100 mt-3 fw-medium py-2 mb-2"
-              disabled={selectedSellers.length === 0}>
-              <small>Continuar compra</small>
+              disabled={selectedSellers.length === 0 || createOrder.isPending}
+              onClick={handleCheckout}>
+              <small>
+                {createOrder.isPending ? 'Procesando...' : 'Continuar compra'}
+              </small>
             </Button>
           </>
         ) : (
