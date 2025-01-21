@@ -1,29 +1,46 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import axios from '@/lib/axios'
 
+/**
+ * Hook personalizado para gestionar categorías.
+ * Proporciona:
+ * - Listado de categorías con caché
+ * - Estado de carga y errores
+ * - Función para obtener categoría por slug
+ */
 export const useCategories = () => {
-  const [categories, setCategories] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  // Query principal para obtener todas las categorías
+  const {
+    data: categories,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ['categories'], // Clave única para identificar esta query
+    queryFn: async () => {
+      const response = await axios.get('/api/categories')
+      return response.data.categories
+    },
+  })
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get('/api/categories')
-        setCategories(response.data.categories)
-        setLoading(false)
-      } catch (error) {
-        setError(true)
-        setLoading(false)
-      }
-    }
-
-    fetchCategories()
-  }, [])
+  /**
+   * Hook para obtener una categoría específica por slug
+   * @param {string} slug - Identificador URL-friendly de la categoría
+   */
+  const useCategory = slug => {
+    return useQuery({
+      queryKey: ['category', slug],
+      queryFn: async () => {
+        const response = await axios.get(`/api/categories/slug/${slug}`)
+        return response.data.category
+      },
+      enabled: !!slug, // Solo ejecuta si hay slug
+    })
+  }
 
   return {
     categories,
     loading,
-    error,
+    error: error?.message,
+    useCategory,
   }
 }

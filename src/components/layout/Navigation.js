@@ -1,6 +1,8 @@
 'use client'
 
 import LoginLinks from '@/app/LoginLinks'
+import { useAuth } from '@/hooks/auth'
+import { useCart } from '@/hooks/useCart'
 import { useCategories } from '@/hooks/useCategories'
 import { useSearch } from '@/hooks/useSearch'
 import Image from 'next/image'
@@ -25,9 +27,11 @@ import {
 } from 'react-bootstrap'
 
 export default function Navigation() {
+  const { user } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const { categories, loading, error } = useCategories()
+  const { getCartProducts } = useCart()
   const {
     searchTerm,
     setSearchTerm,
@@ -37,6 +41,16 @@ export default function Navigation() {
     addToSearchHistory,
   } = useSearch()
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
+
+  const fetchCartCount = async () => {
+    if (user?.cart_id) {
+      const cartItems = await getCartProducts(user.cart_id)
+      const totalUnits =
+        cartItems?.reduce((sum, item) => sum + item.quantity, 0) || 0
+      setCartCount(totalUnits)
+    }
+  }
 
   useEffect(() => {
     if (!pathname.startsWith('/search')) {
@@ -44,6 +58,16 @@ export default function Navigation() {
       setShowSuggestions(false)
     }
   }, [pathname])
+
+  useEffect(() => {
+    fetchCartCount()
+
+    window.addEventListener('cartUpdate', fetchCartCount)
+
+    return () => {
+      window.removeEventListener('cartUpdate', fetchCartCount)
+    }
+  }, [user])
 
   return (
     <Navbar expand="lg" className="bg-primary-meli">
@@ -56,7 +80,7 @@ export default function Navigation() {
                   src="/logo_large.png"
                   width={159}
                   height={40}
-                  alt="Mercado Libre logo"
+                  alt="Mercado Libre México - Donde comprar y vender de todo"
                   priority
                 />
               </NavbarBrand>
@@ -67,6 +91,7 @@ export default function Navigation() {
               <form onSubmit={handleSearch}>
                 <FormControl
                   type="search"
+                  name="q"
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   onFocus={() => setShowSuggestions(true)}
@@ -74,6 +99,8 @@ export default function Navigation() {
                     setTimeout(() => setShowSuggestions(false), 200)
                   }
                   placeholder="Buscar productos, marcas y más…"
+                  maxLength={120}
+                  autoComplete="false"
                   className="border-light rounded-1 shadow-sm pe-5"
                 />
                 <div className="vr position-absolute top-50 end-0 translate-middle-y me-5" />
@@ -93,8 +120,8 @@ export default function Navigation() {
                       ? suggestions.map(product => (
                           <Link
                             key={product.id}
-                            href={`/p/MLP${product.id}`}
-                            className="d-block py-2 px-3 text-decoration-none text-black hover-bg-primary">
+                            href={product.href}
+                            className="d-block py-2 px-3 text-decoration-none text-black hover-bg-primary text-truncate">
                             <i className="bi bi-search me-3 opacity-50" />
                             {product.title}
                           </Link>
@@ -102,7 +129,7 @@ export default function Navigation() {
                       : getSearchHistory().map((term, index) => (
                           <div
                             key={index}
-                            className="py-2 px-3 hover-bg-primary"
+                            className="py-2 px-3 hover-bg-primary d-flex"
                             onClick={() => {
                               setSearchTerm(term)
                               addToSearchHistory(term)
@@ -111,7 +138,9 @@ export default function Navigation() {
                               )
                             }}>
                             <i className="bi bi-clock me-3 opacity-50" />
-                            <span className="user-select-none">{term}</span>
+                            <span className="user-select-none d-block text-truncate">
+                              {term}
+                            </span>
                           </div>
                         ))}
                   </div>
@@ -120,7 +149,12 @@ export default function Navigation() {
           </Col>
           <Col xs="4">
             <div className="text-end ms-auto">
-              <Image src="/meli_plus_header.webp" width={340} height={39} />
+              <Image
+                src="/meli_plus_header.webp"
+                width={340}
+                height={39}
+                alt="SUSCRÍBETE A MELI+ TOTAL POR 65 PESOS"
+              />
             </div>
           </Col>
         </Row>
@@ -159,7 +193,7 @@ export default function Navigation() {
                         <DropdownItem
                           key={category.id}
                           as={Link}
-                          href={`/category/${category.id}`}>
+                          href={`/c/${category.slug}`}>
                           {category.name}
                         </DropdownItem>
                       ))}
@@ -180,15 +214,24 @@ export default function Navigation() {
           </Col>
           <Col xs="4" className="d-flex align-items-center">
             <LoginLinks />
-            <Button
-              variant="link"
-              size="lg"
-              as={Link}
-              title="Carrito"
-              href="/cart"
-              className="link-body-emphasis ms-3 p-0">
-              <i className="bi bi-cart" />
-            </Button>
+            <div className="position-relative">
+              <Button
+                variant="link"
+                size="lg"
+                as={Link}
+                title="Carrito"
+                href="/cart"
+                className="link-body-emphasis ms-3 p-0">
+                <i className="bi bi-cart" />
+                {cartCount > 0 && (
+                  <span
+                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    style={{ fontSize: '0.65rem' }}>
+                    {cartCount > 9 ? '+9' : cartCount}
+                  </span>
+                )}
+              </Button>
+            </div>
           </Col>
         </Row>
       </Container>

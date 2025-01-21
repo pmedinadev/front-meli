@@ -1,0 +1,18 @@
+.formLabel {
+  font-size: 14px;
+  margin-bottom: 0px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #0000008c;
+}
+
+.textarea {
+  resize: none;
+}
+
+.formText {
+  font-size: 13px;
+  color: #0000008c;
+}

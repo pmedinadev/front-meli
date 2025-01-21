@@ -30,7 +30,7 @@ const LoginLinks = () => {
                 width="22"
                 height="22"
                 {...(user?.avatar && { preserveTransformations: true })}
-                alt={`@${user?.username}'s profile picture`}
+                alt={`Avatar de @${user?.username}`}
                 className="rounded-circle"
               />
               <span className="ms-2">{user?.display_name}</span>
@@ -53,7 +53,7 @@ const LoginLinks = () => {
               className="link-body-emphasis text-decoration-none mx-3">
               Mis compras
             </Link>
-            <Link href="/" className="link-body-emphasis text-decoration-none">
+            <Link href="/favorites" className="link-body-emphasis text-decoration-none">
               Favoritos
             </Link>
           </small>

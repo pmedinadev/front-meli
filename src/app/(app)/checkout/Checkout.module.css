@@ -1,0 +1,16 @@
+.stepTitle {
+  font-size: 24px;
+}
+
+.columnText {
+  font-size: 18px;
+}
+
+.disclaimerAddress {
+  font-size: 14px;
+}
+
+.priceDecimal {
+  font-size: 10px;
+  vertical-align: super;
+}
